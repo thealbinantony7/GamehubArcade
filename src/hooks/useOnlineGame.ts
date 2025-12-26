@@ -75,6 +75,8 @@ export const useOnlineGame = () => {
           game_mode: 'online',
           room_code: roomCode,
           user_id: user.id,
+          board: Array(9).fill('null'), // Initialize with 9 empty cells
+          current_player: 'X',
         })
         .select()
         .single();
@@ -202,7 +204,7 @@ export const useOnlineGame = () => {
         if (gameData) {
           setGame({
             id: gameData.id,
-            board: (gameData.board || []).map(cell => cell === 'null' ? null : cell),
+            board: (gameData.board && gameData.board.length === 9 ? gameData.board : Array(9).fill('null')).map(cell => cell === 'null' ? null : cell),
             current_player: gameData.current_player,
             winner: gameData.winner,
             moves: Array.isArray(gameData.moves) ? gameData.moves as { index: number; player: string }[] : [],
@@ -284,7 +286,7 @@ export const useOnlineGame = () => {
 
               return {
                 id: gameData.id,
-                board: gameData.board.map(cell => cell === 'null' ? null : cell),
+                board: (gameData.board && gameData.board.length === 9 ? gameData.board : Array(9).fill('null')).map(cell => cell === 'null' ? null : cell),
                 current_player: gameData.current_player,
                 winner: gameData.winner,
                 moves: Array.isArray(gameData.moves) ? gameData.moves as { index: number; player: string }[] : [],
