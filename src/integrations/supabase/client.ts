@@ -5,8 +5,12 @@ import type { Database } from './types';
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
 const SUPABASE_PUBLISHABLE_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
-console.log('Supabase URL:', SUPABASE_URL);
-console.log('Supabase Key:', SUPABASE_PUBLISHABLE_KEY ? 'EXISTS' : 'MISSING');
+console.log('🔍 Supabase URL:', SUPABASE_URL);
+console.log('🔍 Supabase Key:', SUPABASE_PUBLISHABLE_KEY ? 'EXISTS ✅' : 'MISSING ❌');
+
+if (!SUPABASE_URL || !SUPABASE_PUBLISHABLE_KEY) {
+  console.error('❌ CRITICAL: Supabase environment variables are not loaded!');
+}
 
 // Import the supabase client like this:
 // import { supabase } from "@/integrations/supabase/client";
