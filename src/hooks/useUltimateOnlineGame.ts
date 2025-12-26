@@ -165,12 +165,6 @@ export const useUltimateOnlineGame = () => {
 
       if (roomError) throw roomError;
 
-      // Update with game_type separately (workaround for schema cache)
-      await supabase
-        .from('game_rooms')
-        .update({ game_type: 'ultimate' } as any)
-        .eq('id', roomData.id);
-
       setRoom(roomData as GameRoom);
       setGame({
         id: gameData.id,
@@ -218,19 +212,6 @@ export const useUltimateOnlineGame = () => {
         setLoading(false);
         return;
       }
-
-      // Check if this is an Ultimate game by checking the room's game_type
-      console.log('Room data:', roomData);
-      console.log('Room game_type:', roomData.game_type);
-
-      if (roomData.game_type !== 'ultimate') {
-        console.log('Rejecting: not an ultimate game, game_type is:', roomData.game_type);
-        setError('This room is for regular Tic Tac Toe');
-        setLoading(false);
-        return;
-      }
-
-      console.log('Validated: this is an ultimate game');
 
       if (roomData.status !== 'waiting') {
         setError('Game already in progress');
