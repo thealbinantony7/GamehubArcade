@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { Home, Gamepad2, Trophy, User } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { soundManager } from "@/utils/sounds";
+import { AVATARS } from "@/components/TicTacToe/avatars";
 
 interface NavItem {
   id: string;
@@ -20,7 +21,7 @@ const navItems: NavItem[] = [
 export const DynamicIsland = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user, profile } = useAuth();
 
   const handleNavClick = (path: string) => {
     soundManager.playClick();
@@ -69,11 +70,17 @@ export const DynamicIsland = () => {
       {user ? (
         <motion.button
           onClick={() => handleNavClick("/profile")}
-          className={`dynamic-island-item ${isActive("/profile") ? "active" : ""}`}
+          className={`dynamic-island-item ${isActive("/profile") ? "active" : ""} !px-2`}
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
         >
-          <User className="w-4 h-4" />
+          {profile ? (
+            <span className="text-xl leading-none flex items-center justify-center">
+              {AVATARS[profile.avatar_index || 0]}
+            </span>
+          ) : (
+            <User className="w-4 h-4" />
+          )}
         </motion.button>
       ) : (
         <motion.button
