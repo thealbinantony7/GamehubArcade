@@ -1,6 +1,6 @@
 import { useState, useCallback, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
-import { ArrowLeft, LogOut, Users } from "lucide-react";
+import { ArrowLeft, Users } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import GameBoard from "./GameBoard";
 import GameStatus from "./GameStatus";
@@ -506,26 +506,15 @@ const TicTacToe = () => {
 
 
         {user && (
-          <>
-            <motion.button
-              onClick={() => { soundManager.playClick(); setShowFriends(true); }}
-              className="glass-button rounded-full p-3 fixed top-4 right-28 z-20"
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
-              title="Friends"
-            >
-              <Users className="w-5 h-5 text-foreground" />
-            </motion.button>
-            <motion.button
-              onClick={handleSignOut}
-              className="glass-button rounded-full p-3 fixed top-4 right-16 z-20"
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
-              title="Sign out"
-            >
-              <LogOut className="w-5 h-5 text-foreground" />
-            </motion.button>
-          </>
+          <motion.button
+            onClick={() => { soundManager.playClick(); setShowFriends(true); }}
+            className="glass-button rounded-full p-3 fixed top-4 right-36 z-20"
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+            title="Friends"
+          >
+            <Users className="w-5 h-5 text-foreground" />
+          </motion.button>
         )}
 
         <motion.div
