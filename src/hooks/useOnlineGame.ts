@@ -60,13 +60,13 @@ export const useOnlineGame = () => {
       setError('You must be logged in to create a room');
       return;
     }
-    
+
     setLoading(true);
     setError(null);
-    
+
     try {
       const roomCode = generateRoomCode();
-      
+
       // Create the game first
       const { data: gameData, error: gameError } = await supabase
         .from('games')
@@ -106,10 +106,10 @@ export const useOnlineGame = () => {
       });
       setIsHost(true);
       setPlayerName(hostName);
-      
+
       // Subscribe to room changes
       subscribeToRoom(roomCode);
-      
+
     } catch (err) {
       console.error('Error creating room:', err);
       setError('Failed to create room');
@@ -124,10 +124,10 @@ export const useOnlineGame = () => {
       setError('You must be logged in to join a room');
       return;
     }
-    
+
     setLoading(true);
     setError(null);
-    
+
     try {
       // Find the room
       const { data: roomData, error: findError } = await supabase
@@ -141,6 +141,22 @@ export const useOnlineGame = () => {
         setError('Room not found');
         setLoading(false);
         return;
+      }
+
+      // Check if this is a regular Tic Tac Toe game (not Ultimate)
+      if (roomData.game_id) {
+        const { data: gameCheck } = await supabase
+          .from('games')
+          .select('moves')
+          .eq('id', roomData.game_id)
+          .maybeSingle();
+
+        const moves = gameCheck?.moves as { gameType?: string } | null;
+        if (moves && moves.gameType === 'ultimate') {
+          setError('This room is for Ultimate Tic Tac Toe');
+          setLoading(false);
+          return;
+        }
       }
 
       if (roomData.status !== 'waiting') {
@@ -202,10 +218,10 @@ export const useOnlineGame = () => {
       } as GameRoom);
       setIsHost(false);
       setPlayerName(guestName);
-      
+
       soundManager.playJoin();
       subscribeToRoom(roomCode.toUpperCase());
-      
+
     } catch (err) {
       console.error('Error joining room:', err);
       setError('Failed to join room');
@@ -235,7 +251,7 @@ export const useOnlineGame = () => {
           if (payload.new) {
             const newRoom = payload.new as GameRoom;
             setRoom(newRoom);
-            
+
             if (newRoom.status === 'playing' && payload.old && (payload.old as GameRoom).status === 'waiting') {
               soundManager.playJoin();
             }
@@ -261,11 +277,11 @@ export const useOnlineGame = () => {
               moves: Json;
               room_code: string | null;
             };
-            
+
             // Only process if this is our game
             setGame(prev => {
               if (!prev || prev.id !== gameData.id) return prev;
-              
+
               return {
                 id: gameData.id,
                 board: gameData.board.map(cell => cell === 'null' ? null : cell),
@@ -287,7 +303,7 @@ export const useOnlineGame = () => {
   // Make a move
   const makeMove = useCallback(async (index: number) => {
     if (!game || !room) return false;
-    
+
     // Determine if it's this player's turn
     const mySymbol = isHost ? 'X' : 'O';
     if (game.current_player !== mySymbol) return false;
@@ -296,7 +312,7 @@ export const useOnlineGame = () => {
 
     const newBoard = [...game.board];
     newBoard[index] = mySymbol;
-    
+
     const newMoves = [...game.moves, { index, player: mySymbol }];
     const nextPlayer = mySymbol === 'X' ? 'O' : 'X';
 
@@ -384,7 +400,7 @@ const checkWinner = (board: (string | null)[]): string | null => {
     [0, 3, 6], [1, 4, 7], [2, 5, 8],
     [0, 4, 8], [2, 4, 6]
   ];
-  
+
   for (const [a, b, c] of lines) {
     if (board[a] && board[a] === board[b] && board[a] === board[c]) {
       return board[a];
