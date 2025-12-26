@@ -10,7 +10,7 @@ import { useUserRole } from "@/hooks/useUserRole";
 import { soundManager } from "@/utils/sounds";
 import DynamicIsland from "@/components/layout/DynamicIsland";
 import ThemeToggle from "@/components/TicTacToe/ThemeToggle";
-import SoundToggle from "@/components/TicTacToe/SoundToggle";
+import { useEffect } from "react";
 
 interface Game {
   id: string;
@@ -135,15 +135,18 @@ const GameHub = () => {
   const { user, profile, signOut } = useAuth();
   const { isModerator } = useUserRole();
 
+  useEffect(() => {
+    soundManager.setEnabled(false);
+    return () => soundManager.setEnabled(true);
+  }, []);
+
   const handleGameClick = (game: Game) => {
-    soundManager.playClick();
     navigate(`/play/${game.id}`);
   };
 
   const featuredGame = games.find((g) => g.featured);
 
   const scrollToArcadeCollection = () => {
-    soundManager.playClick();
     const el = document.getElementById("arcade-collection");
     el?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
@@ -152,8 +155,6 @@ const GameHub = () => {
     <div className="min-h-screen smooth-scroll">
       <DynamicIsland />
       <ThemeToggle />
-      <SoundToggle />
-
       {/* Hero Section - Apple Style */}
       <section className="relative min-h-screen flex flex-col items-center justify-center px-6 pt-20">
         {/* Background gradient */}

@@ -9,8 +9,6 @@ import { triggerWinCelebration } from '@/utils/confetti';
 import { getUltimateAIMove, type Difficulty } from '@/utils/ultimateAiOpponent';
 import { useAuth } from '@/contexts/AuthContext';
 import { AVATARS } from '@/components/TicTacToe/avatars';
-import ThemeToggle from '@/components/TicTacToe/ThemeToggle';
-import SoundToggle from '@/components/TicTacToe/SoundToggle';
 import Leaderboard from '@/components/TicTacToe/Leaderboard';
 import { useUltimateOnlineGame } from '@/hooks/useUltimateOnlineGame';
 import { GameResultOverlay } from '@/components/TicTacToe/GameResultOverlay';
@@ -573,8 +571,6 @@ export function UltimateTicTacToeGame() {
       return (
         <div className="min-h-screen flex flex-col items-center justify-center p-4 sm:p-8">
           <BackgroundDecorations />
-          <ThemeToggle />
-          <SoundToggle />
           <motion.div
             className="relative z-10 w-full max-w-md space-y-6"
             initial={{ opacity: 0 }}

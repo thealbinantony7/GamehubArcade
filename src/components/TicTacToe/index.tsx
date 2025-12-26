@@ -13,8 +13,6 @@ import ReplayViewer from "./ReplayViewer";
 import Leaderboard from "./Leaderboard";
 import FriendsPanel from "./FriendsPanel";
 import ProfileEditor from "./ProfileEditor";
-import SoundToggle from "./SoundToggle";
-import ThemeToggle from "./ThemeToggle";
 import { soundManager } from "@/utils/sounds";
 import { getAIMove, type Difficulty } from "@/utils/aiOpponent";
 import { useGameHistory, type GameRecord } from "@/hooks/useGameHistory";
@@ -270,8 +268,7 @@ const TicTacToe = () => {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center p-4 sm:p-8">
         <BackgroundDecorations />
-        <ThemeToggle />
-        <SoundToggle />
+
         <motion.div
           className="relative z-10 w-full max-w-md space-y-6"
           initial={{ opacity: 0 }}
@@ -295,8 +292,7 @@ const TicTacToe = () => {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center p-4 sm:p-8">
         <BackgroundDecorations />
-        <ThemeToggle />
-        <SoundToggle />
+
         <motion.div
           className="relative z-10 w-full max-w-md space-y-6"
           initial={{ opacity: 0 }}
@@ -320,8 +316,7 @@ const TicTacToe = () => {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center p-4 sm:p-8">
         <BackgroundDecorations />
-        <ThemeToggle />
-        <SoundToggle />
+
         <motion.div
           className="relative z-10 w-full max-w-md space-y-6"
           initial={{ opacity: 0 }}
@@ -346,8 +341,7 @@ const TicTacToe = () => {
       return (
         <div className="min-h-screen flex flex-col items-center justify-center p-4 sm:p-8">
           <BackgroundDecorations />
-          <ThemeToggle />
-          <SoundToggle />
+
           <motion.div
             className="relative z-10 w-full max-w-md space-y-6"
             initial={{ opacity: 0 }}
@@ -382,8 +376,7 @@ const TicTacToe = () => {
       return (
         <div className="min-h-screen flex flex-col items-center justify-center p-4 sm:p-8">
           <BackgroundDecorations />
-          <ThemeToggle />
-          <SoundToggle />
+
           <motion.div
             className="relative z-10 w-full max-w-md space-y-6"
             initial={{ opacity: 0 }}
@@ -465,8 +458,7 @@ const TicTacToe = () => {
       return (
         <div className="min-h-screen flex flex-col items-center justify-center p-4 sm:p-8">
           <BackgroundDecorations />
-          <ThemeToggle />
-          <SoundToggle />
+
           <motion.div
             className="relative z-10 w-full max-w-md space-y-6"
             initial={{ opacity: 0 }}
@@ -481,8 +473,7 @@ const TicTacToe = () => {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center p-4 sm:p-8">
         <BackgroundDecorations />
-        <ThemeToggle />
-        <SoundToggle />
+
         <motion.div
           className="relative z-10 w-full max-w-md space-y-6"
           initial={{ opacity: 0 }}
@@ -512,8 +503,7 @@ const TicTacToe = () => {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center p-4 sm:p-8">
         <BackgroundDecorations />
-        <ThemeToggle />
-        <SoundToggle />
+
 
         {user && (
           <>
@@ -564,8 +554,7 @@ const TicTacToe = () => {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center p-4 sm:p-8">
       <BackgroundDecorations />
-      <ThemeToggle />
-      <SoundToggle />
+
 
       <motion.div
         className="relative z-10 w-full max-w-md space-y-6"
