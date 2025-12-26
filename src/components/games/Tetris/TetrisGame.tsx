@@ -11,18 +11,18 @@ const BOARD_HEIGHT = 20;
 // Responsive cell size
 const useResponsiveCellSize = () => {
   const [cellSize, setCellSize] = useState(24);
-  
+
   useEffect(() => {
     const updateSize = () => {
       const maxBoardWidth = Math.min(window.innerWidth - 180, 240);
       setCellSize(Math.floor(maxBoardWidth / BOARD_WIDTH));
     };
-    
+
     updateSize();
     window.addEventListener('resize', updateSize);
     return () => window.removeEventListener('resize', updateSize);
   }, []);
-  
+
   return cellSize;
 };
 
@@ -46,7 +46,7 @@ interface Piece {
   y: number;
 }
 
-const createEmptyBoard = (): Board => 
+const createEmptyBoard = (): Board =>
   Array.from({ length: BOARD_HEIGHT }, () => Array(BOARD_WIDTH).fill(null));
 
 const getRandomTetromino = (): TetrominoType => {
@@ -93,8 +93,8 @@ export function TetrisGame() {
           const newX = piece.x + x;
           const newY = piece.y + y;
           if (
-            newX < 0 || 
-            newX >= BOARD_WIDTH || 
+            newX < 0 ||
+            newX >= BOARD_WIDTH ||
             newY >= BOARD_HEIGHT ||
             (newY >= 0 && boardState[newY][newX])
           ) {
@@ -132,12 +132,12 @@ export function TetrisGame() {
       if (isFull) clearedIndices.push(index);
       return !isFull;
     });
-    
+
     const linesCleared = BOARD_HEIGHT - newBoard.length;
     while (newBoard.length < BOARD_HEIGHT) {
       newBoard.unshift(Array(BOARD_WIDTH).fill(null));
     }
-    
+
     return { newBoard, linesCleared, clearedIndices };
   }, []);
 
@@ -145,20 +145,20 @@ export function TetrisGame() {
     if (!currentPiece || !isPlaying || gameOver) return;
 
     const newPiece = { ...currentPiece, y: currentPiece.y + 1 };
-    
+
     if (isValidMove(newPiece, board)) {
       setCurrentPiece(newPiece);
     } else {
       // Lock piece
       const mergedBoard = mergePieceToBoard(currentPiece, board);
       const { newBoard, linesCleared, clearedIndices } = clearLines(mergedBoard);
-      
+
       if (linesCleared > 0) {
         setClearingLines(clearedIndices);
         setTimeout(() => {
           setClearingLines([]);
           setBoard(newBoard);
-          
+
           const points = [0, 100, 300, 500, 800][linesCleared] * level;
           setScore(prev => {
             const newScore = prev + points;
@@ -173,7 +173,7 @@ export function TetrisGame() {
             setLevel(Math.floor(newLines / 10) + 1);
             return newLines;
           });
-          
+
           confetti({
             particleCount: linesCleared * 30,
             spread: 70,
@@ -211,7 +211,7 @@ export function TetrisGame() {
       if (!currentPiece || !isPlaying || gameOver) return;
 
       let newPiece: Piece;
-      
+
       switch (e.key) {
         case 'ArrowLeft':
         case 'a':
@@ -259,7 +259,7 @@ export function TetrisGame() {
 
   const renderBoard = () => {
     const displayBoard = board.map(row => [...row]);
-    
+
     // Render current piece on board
     if (currentPiece) {
       for (let y = 0; y < currentPiece.shape.length; y++) {
@@ -275,7 +275,7 @@ export function TetrisGame() {
   };
 
   return (
-    <div className="flex flex-col lg:flex-row items-center lg:items-start gap-6 p-6">
+    <div className="flex flex-col lg:flex-row items-center justify-center gap-6 p-6 mx-auto max-w-6xl">
       {/* Game Info */}
       <div className="flex flex-row lg:flex-col gap-4 lg:w-32">
         <div className="glass-card p-4 text-center">
@@ -301,7 +301,7 @@ export function TetrisGame() {
 
       {/* Game Board */}
       <div className="flex flex-col items-center gap-4">
-        <div 
+        <div
           className="relative rounded-2xl overflow-hidden"
           style={{
             width: BOARD_WIDTH * CELL_SIZE + 4,
@@ -312,7 +312,7 @@ export function TetrisGame() {
           }}
         >
           {/* Grid */}
-          <div 
+          <div
             className="absolute inset-0 opacity-10"
             style={{
               backgroundImage: `
@@ -344,7 +344,7 @@ export function TetrisGame() {
                   }}
                 >
                   {cell && (
-                    <div 
+                    <div
                       className="absolute inset-0 rounded opacity-50"
                       style={{
                         background: 'linear-gradient(135deg, rgba(255,255,255,0.4) 0%, transparent 50%)',
@@ -394,7 +394,7 @@ export function TetrisGame() {
                 Restart
               </Button>
             </>
-        ) : null}
+          ) : null}
         </div>
 
         {/* Mobile Controls */}

@@ -17,18 +17,18 @@ const INITIAL_SPEED = 150;
 // Responsive cell size
 const useResponsiveCellSize = () => {
   const [cellSize, setCellSize] = useState(20);
-  
+
   useEffect(() => {
     const updateSize = () => {
       const maxBoardSize = Math.min(window.innerWidth - 48, 400);
       setCellSize(Math.floor(maxBoardSize / GRID_SIZE));
     };
-    
+
     updateSize();
     window.addEventListener('resize', updateSize);
     return () => window.removeEventListener('resize', updateSize);
   }, []);
-  
+
   return cellSize;
 };
 
@@ -73,7 +73,7 @@ export function SnakeGame() {
   const moveSnake = useCallback(() => {
     setSnake(prevSnake => {
       const head = { ...prevSnake[0] };
-      
+
       switch (directionRef.current) {
         case 'UP': head.y -= 1; break;
         case 'DOWN': head.y += 1; break;
@@ -127,7 +127,7 @@ export function SnakeGame() {
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (!isPlaying) return;
-      
+
       switch (e.key) {
         case 'ArrowUp':
         case 'w':
@@ -175,7 +175,7 @@ export function SnakeGame() {
         origin: { y: 0.6 },
         colors: ['#00ff88', '#00ffff', '#ff00ff'],
       });
-      
+
       if (qualifiesForLeaderboard(score)) {
         setShowSubmitDialog(true);
       }
@@ -188,7 +188,7 @@ export function SnakeGame() {
   };
 
   return (
-    <div className="flex flex-col lg:flex-row items-center lg:items-start gap-6 p-6">
+    <div className="flex flex-col lg:flex-row items-center justify-center gap-6 p-6 mx-auto max-w-6xl">
       <div className="flex flex-col items-center gap-6">
         {/* Score Display */}
         <div className="flex items-center gap-8">
@@ -206,7 +206,7 @@ export function SnakeGame() {
         </div>
 
         {/* Game Board */}
-        <div 
+        <div
           className="relative rounded-2xl overflow-hidden"
           style={{
             width: GRID_SIZE * CELL_SIZE,
@@ -217,7 +217,7 @@ export function SnakeGame() {
           }}
         >
           {/* Grid Lines */}
-          <div 
+          <div
             className="absolute inset-0 opacity-10"
             style={{
               backgroundImage: `
@@ -240,10 +240,10 @@ export function SnakeGame() {
                 height: CELL_SIZE - 2,
                 left: segment.x * CELL_SIZE + 1,
                 top: segment.y * CELL_SIZE + 1,
-                background: index === 0 
+                background: index === 0
                   ? 'linear-gradient(135deg, #00ff88 0%, #00cc6a 100%)'
                   : `linear-gradient(135deg, rgba(0, 255, 136, ${1 - index * 0.03}) 0%, rgba(0, 204, 106, ${1 - index * 0.03}) 100%)`,
-                boxShadow: index === 0 
+                boxShadow: index === 0
                   ? '0 0 20px rgba(0, 255, 136, 0.8), 0 0 40px rgba(0, 255, 136, 0.4)'
                   : '0 0 10px rgba(0, 255, 136, 0.5)',
               }}
@@ -277,13 +277,13 @@ export function SnakeGame() {
               <motion.div
                 key={particle.id}
                 className="absolute w-2 h-2 rounded-full bg-primary"
-                initial={{ 
-                  x: particle.x, 
-                  y: particle.y, 
-                  scale: 1, 
-                  opacity: 1 
+                initial={{
+                  x: particle.x,
+                  y: particle.y,
+                  scale: 1,
+                  opacity: 1
                 }}
-                animate={{ 
+                animate={{
                   x: particle.x + (Math.random() - 0.5) * 60,
                   y: particle.y + (Math.random() - 0.5) * 60,
                   scale: 0,
