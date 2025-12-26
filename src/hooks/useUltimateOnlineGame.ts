@@ -214,12 +214,16 @@ export const useUltimateOnlineGame = () => {
 
       // Check if this is an Ultimate game
       if (roomData.game_id) {
-        const { data: gameCheck } = await supabase
+        console.log('Room data:', roomData);
+        console.log('Looking for game with ID:', roomData.game_id);
+
+        const { data: gameCheck, error: gameCheckError } = await supabase
           .from('games')
           .select('moves')
           .eq('id', roomData.game_id)
           .maybeSingle();
 
+        console.log('Game check error:', gameCheckError);
         console.log('Ultimate join - checking game type:', gameCheck);
 
         const moves = gameCheck?.moves as { gameType?: string } | null;
