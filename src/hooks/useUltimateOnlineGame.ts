@@ -125,6 +125,8 @@ export const useUltimateOnlineGame = () => {
         gameType: 'ultimate'
       };
 
+      console.log('Creating Ultimate room with moves:', initialMoves);
+
       // Create the game first
       const { data: gameData, error: gameError } = await supabase
         .from('games')
@@ -139,7 +141,13 @@ export const useUltimateOnlineGame = () => {
         .select()
         .single();
 
-      if (gameError) throw gameError;
+      if (gameError) {
+        console.error('Error creating game:', gameError);
+        throw gameError;
+      }
+
+      console.log('Game created, returned data:', gameData);
+      console.log('Moves field in response:', gameData.moves);
 
       // Create the room
       const { data: roomData, error: roomError } = await supabase
