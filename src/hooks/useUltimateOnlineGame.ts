@@ -109,13 +109,13 @@ export const useUltimateOnlineGame = () => {
       setError('You must be logged in to create a room');
       return;
     }
-    
+
     setLoading(true);
     setError(null);
-    
+
     try {
       const roomCode = generateRoomCode();
-      
+
       // Create initial 81-cell board (all null)
       const initialBoard = Array(81).fill('null');
       const initialMoves = {
@@ -124,7 +124,7 @@ export const useUltimateOnlineGame = () => {
         activeBoard: null,
         gameType: 'ultimate'
       };
-      
+
       // Create the game first
       const { data: gameData, error: gameError } = await supabase
         .from('games')
@@ -167,10 +167,10 @@ export const useUltimateOnlineGame = () => {
       });
       setIsHost(true);
       setPlayerName(hostName);
-      
+
       // Subscribe to room changes
       subscribeToRoom(roomCode);
-      
+
     } catch (err) {
       console.error('Error creating room:', err);
       setError('Failed to create room');
@@ -185,10 +185,10 @@ export const useUltimateOnlineGame = () => {
       setError('You must be logged in to join a room');
       return;
     }
-    
+
     setLoading(true);
     setError(null);
-    
+
     try {
       // Find the room
       const { data: roomData, error: findError } = await supabase
@@ -211,13 +211,22 @@ export const useUltimateOnlineGame = () => {
           .select('moves')
           .eq('id', roomData.game_id)
           .maybeSingle();
-        
+
+        console.log('Ultimate join - checking game type:', gameCheck);
+
         const moves = gameCheck?.moves as { gameType?: string } | null;
+        console.log('Parsed moves:', moves);
+        console.log('Game type:', moves?.gameType);
+
+        // Check if this is NOT an ultimate game
         if (!moves || moves.gameType !== 'ultimate') {
+          console.log('Rejecting: not an ultimate game');
           setError('This room is for regular Tic Tac Toe');
           setLoading(false);
           return;
         }
+
+        console.log('Validated: this is an ultimate game');
       }
 
       if (roomData.status !== 'waiting') {
@@ -261,11 +270,11 @@ export const useUltimateOnlineGame = () => {
           .single();
 
         if (gameData) {
-          const movesData = gameData.moves as { 
+          const movesData = gameData.moves as {
             boardWinners?: (string | null)[];
             activeBoard?: number | null;
           } | null;
-          
+
           setGame({
             id: gameData.id,
             boards: unflattenBoards(gameData.board || []),
@@ -285,10 +294,10 @@ export const useUltimateOnlineGame = () => {
       } as GameRoom);
       setIsHost(false);
       setPlayerName(guestName);
-      
+
       soundManager.playJoin();
       subscribeToRoom(roomCode.toUpperCase());
-      
+
     } catch (err) {
       console.error('Error joining room:', err);
       setError('Failed to join room');
@@ -318,7 +327,7 @@ export const useUltimateOnlineGame = () => {
           if (payload.new) {
             const newRoom = payload.new as GameRoom;
             setRoom(newRoom);
-            
+
             if (newRoom.status === 'playing' && payload.old && (payload.old as GameRoom).status === 'waiting') {
               soundManager.playJoin();
             }
@@ -343,15 +352,15 @@ export const useUltimateOnlineGame = () => {
               winner: string | null;
               moves: Json;
             };
-            
-            const movesData = gameData.moves as { 
+
+            const movesData = gameData.moves as {
               boardWinners?: (string | null)[];
               activeBoard?: number | null;
             } | null;
-            
+
             setGame(prev => {
               if (!prev || prev.id !== gameData.id) return prev;
-              
+
               return {
                 id: gameData.id,
                 boards: unflattenBoards(gameData.board),
@@ -374,7 +383,7 @@ export const useUltimateOnlineGame = () => {
   // Make a move
   const makeMove = useCallback(async (boardIndex: number, cellIndex: number) => {
     if (!game || !room) return false;
-    
+
     // Determine if it's this player's turn
     const mySymbol = isHost ? 'X' : 'O';
     if (game.current_player !== mySymbol) return false;
@@ -384,8 +393,8 @@ export const useUltimateOnlineGame = () => {
     if (game.activeBoard !== null && game.activeBoard !== boardIndex) return false;
 
     // Make the move
-    const newBoards = game.boards.map((board, i) => 
-      i === boardIndex 
+    const newBoards = game.boards.map((board, i) =>
+      i === boardIndex
         ? board.map((cell, j) => j === cellIndex ? mySymbol as Player : cell)
         : [...board]
     );
@@ -399,9 +408,9 @@ export const useUltimateOnlineGame = () => {
 
     // Check if the big board is won
     const bigBoardWinner = checkWinner(newBoardWinners);
-    
+
     // Check for draw
-    const allBoardsDecided = newBoardWinners.every((w, i) => 
+    const allBoardsDecided = newBoardWinners.every((w, i) =>
       w !== null || isBoardFull(newBoards[i])
     );
     const isDraw = allBoardsDecided && !bigBoardWinner;
