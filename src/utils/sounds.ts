@@ -210,6 +210,28 @@ class SoundManager {
       oscillator.stop(startTime + 0.15);
     });
   }
+  // Message received sound
+  playMessage() {
+    if (!this.enabled) return;
+    const ctx = this.getContext();
+    if (!ctx) return;
+
+    const oscillator = ctx.createOscillator();
+    const gainNode = ctx.createGain();
+
+    oscillator.connect(gainNode);
+    gainNode.connect(ctx.destination);
+
+    // Light ping
+    oscillator.frequency.setValueAtTime(880, ctx.currentTime); // A5
+    oscillator.type = "sine";
+
+    gainNode.gain.setValueAtTime(0.1, ctx.currentTime);
+    gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.1);
+
+    oscillator.start(ctx.currentTime);
+    oscillator.stop(ctx.currentTime + 0.1);
+  }
 }
 
 

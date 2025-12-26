@@ -13,6 +13,8 @@ import ThemeToggle from '@/components/TicTacToe/ThemeToggle';
 import SoundToggle from '@/components/TicTacToe/SoundToggle';
 import Leaderboard from '@/components/TicTacToe/Leaderboard';
 import { useUltimateOnlineGame } from '@/hooks/useUltimateOnlineGame';
+import { GameResultOverlay } from '@/components/TicTacToe/GameResultOverlay';
+import { GameChat } from '@/components/TicTacToe/GameChat';
 
 type Player = 'X' | 'O' | null;
 type SmallBoard = Player[];
@@ -861,6 +863,19 @@ export function UltimateTicTacToeGame() {
             <ArrowLeft className="w-4 h-4" />
             Leave Game
           </Button>
+
+          <GameResultOverlay
+            isVisible={!!onlineWinner}
+            result={onlineWinner === 'draw' ? 'draw' : onlineWinner === onlineGame.mySymbol ? 'win' : 'loss'}
+            winnerName={onlineWinner === 'X' ? onlineGame.room.host_name : (onlineWinner === 'O' ? onlineGame.room.guest_name : undefined)}
+            onPlayAgain={handleBackToMenu}
+            onMenu={handleBackToMenu}
+          />
+
+          <GameChat
+            roomCode={onlineGame.room.room_code}
+            playerName={onlineName}
+          />
         </div>
       );
     }
@@ -1068,6 +1083,14 @@ export function UltimateTicTacToeGame() {
           </motion.div>
         )}
       </AnimatePresence>
+
+      <GameResultOverlay
+        isVisible={!!winner || isDraw}
+        result={winner ? (gameMode === 'ai' && winner === 'O' ? 'loss' : 'win') : 'draw'}
+        winnerName={gameMode === 'ai' && winner === 'O' ? 'AI' : `Player ${winner}`}
+        onPlayAgain={resetGame}
+        onMenu={handleBackToMenu}
+      />
     </div>
   );
 }

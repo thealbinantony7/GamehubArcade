@@ -21,6 +21,8 @@ import { useGameHistory, type GameRecord } from "@/hooks/useGameHistory";
 import { useOnlineGame } from "@/hooks/useOnlineGame";
 import { useAuth } from "@/contexts/AuthContext";
 import { triggerWinCelebration } from "@/utils/confetti";
+import { GameResultOverlay } from "./GameResultOverlay";
+import { GameChat } from "./GameChat";
 
 const WINNING_COMBINATIONS = [
   [0, 1, 2], [3, 4, 5], [6, 7, 8],
@@ -438,6 +440,19 @@ const TicTacToe = () => {
               <ArrowLeft className="w-5 h-5" />
               Leave Game
             </motion.button>
+
+            <GameResultOverlay
+              isVisible={!!onlineWinner}
+              result={onlineWinner === 'draw' ? 'draw' : onlineWinner === onlineGame.mySymbol ? 'win' : 'loss'}
+              winnerName={onlineWinner === 'X' ? onlineGame.room.host_name : (onlineWinner === 'O' ? onlineGame.room.guest_name : undefined)}
+              onPlayAgain={handleBackToMenu}
+              onMenu={handleBackToMenu}
+            />
+
+            <GameChat
+              roomCode={onlineGame.room.room_code}
+              playerName={onlineGame.isHost ? onlineGame.room.host_name : onlineGame.room.guest_name}
+            />
           </motion.div>
         </div>
       );
@@ -616,6 +631,14 @@ const TicTacToe = () => {
           onRestart={handleRestart}
           onResetScores={handleResetScores}
           gameOver={gameOver}
+        />
+
+        <GameResultOverlay
+          isVisible={gameOver}
+          result={winner ? (gameMode === 'ai' && winner === 'O' ? 'loss' : 'win') : 'draw'}
+          winnerName={gameMode === 'ai' && winner === 'O' ? 'AI' : `Player ${winner}`}
+          onPlayAgain={handleRestart}
+          onMenu={handleBackToMenu}
         />
       </motion.div>
     </div>
