@@ -169,7 +169,7 @@ const GameHub = () => {
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
         >
           <motion.span
-            className="feature-badge mb-6 inline-block"
+            className="feature-badge mb-6"
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.2 }}
