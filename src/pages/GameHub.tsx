@@ -194,39 +194,45 @@ const GameHub = () => {
           {/* User Welcome or Sign In CTA */}
           {user && profile ? (
             <motion.div
-              className="inline-flex items-center gap-3 glass-panel rounded-full px-4 py-2 mb-8"
+              className="flex flex-col sm:flex-row items-center justify-center gap-3 glass-panel rounded-3xl sm:rounded-full p-6 sm:px-6 sm:py-2 mb-8 w-[85vw] max-w-sm sm:w-auto sm:max-w-none mx-auto"
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.4 }}
             >
-              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center">
-                <User className="w-4 h-4 text-primary" />
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center">
+                  <User className="w-4 h-4 text-primary" />
+                </div>
+                <span className="text-foreground font-medium">Welcome, {profile.username}!</span>
               </div>
-              <span className="text-foreground font-medium">Welcome, {profile.username}!</span>
+
               <span className="text-xs text-muted-foreground">
                 {profile.wins}W · {profile.games_played} games
               </span>
-              {isModerator && (
+
+              <div className="flex items-center gap-2 mt-2 sm:mt-0">
+                {isModerator && (
+                  <motion.button
+                    onClick={() => navigate("/admin")}
+                    className="flex items-center gap-1 px-3 py-1 rounded-full bg-primary/20 text-primary text-xs font-medium hover:bg-primary/30 transition-colors"
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    <Shield className="w-3 h-3" />
+                    Admin
+                  </motion.button>
+                )}
+
                 <motion.button
-                  onClick={() => navigate("/admin")}
-                  className="ml-2 flex items-center gap-1 px-3 py-1 rounded-full bg-primary/20 text-primary text-xs font-medium hover:bg-primary/30 transition-colors"
+                  onClick={() => signOut()}
+                  className="flex items-center gap-1 px-3 py-1 rounded-full bg-red-500/10 text-red-500 text-xs font-medium hover:bg-red-500/20 transition-colors"
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
-                  <Shield className="w-3 h-3" />
-                  Admin
+                  <LogOut className="w-3 h-3" />
+                  Sign Out
                 </motion.button>
-              )}
-
-              <motion.button
-                onClick={() => signOut()}
-                className="ml-2 flex items-center gap-1 px-3 py-1 rounded-full bg-red-500/10 text-red-500 text-xs font-medium hover:bg-red-500/20 transition-colors"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <LogOut className="w-3 h-3" />
-                Sign Out
-              </motion.button>
+              </div>
             </motion.div>
           ) : (
             <motion.button
