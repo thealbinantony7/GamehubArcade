@@ -35,7 +35,7 @@ export const DynamicIsland = () => {
 
   return (
     <motion.nav
-      className="dynamic-island"
+      className="dynamic-island gap-0.5 md:gap-1 px-1.5 md:px-2"
       initial={{ y: -100, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{
@@ -50,7 +50,7 @@ export const DynamicIsland = () => {
           <motion.button
             key={item.id}
             onClick={() => handleNavClick(item.path)}
-            className={`dynamic-island-item ${isActive(item.path) ? "active" : ""}`}
+            className={`dynamic-island-item ${isActive(item.path) ? "active" : ""} px-2 md:px-4 py-1.5 md:py-2`}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             transition={{ type: "spring", stiffness: 400, damping: 25 }}
@@ -64,18 +64,18 @@ export const DynamicIsland = () => {
       </AnimatePresence>
 
       {/* Divider */}
-      <div className="w-px h-6 bg-border/50 mx-1" />
+      <div className="w-px h-5 md:h-6 bg-border/50 mx-0.5 md:mx-1" />
 
       {/* User/Settings */}
       {user ? (
         <motion.button
           onClick={() => handleNavClick("/profile")}
-          className={`dynamic-island-item ${isActive("/profile") ? "active" : ""} !px-2`}
+          className={`dynamic-island-item ${isActive("/profile") ? "active" : ""} !px-1.5 md:!px-2 py-1.5 md:py-2`}
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
         >
           {profile ? (
-            <span className="text-xl leading-none flex items-center justify-center">
+            <span className="text-lg md:text-xl leading-none flex items-center justify-center">
               {AVATARS[profile.avatar_index || 0]}
             </span>
           ) : (
@@ -85,11 +85,11 @@ export const DynamicIsland = () => {
       ) : (
         <motion.button
           onClick={() => handleNavClick("/auth")}
-          className="dynamic-island-item"
+          className="dynamic-island-item px-3 md:px-4 py-1.5 md:py-2"
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
         >
-          <span className="text-primary font-medium">Sign In</span>
+          <span className="text-primary font-medium text-xs md:text-sm">Sign In</span>
         </motion.button>
       )}
 
