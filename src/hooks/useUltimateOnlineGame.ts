@@ -17,6 +17,7 @@ interface GameRoom {
   guest_name: string | null;
   game_id: string | null;
   status: string;
+  game_type?: string;
 }
 
 interface UltimateGameState {
@@ -158,6 +159,7 @@ export const useUltimateOnlineGame = () => {
           host_name: hostName,
           game_id: gameData.id,
           status: 'waiting',
+          game_type: 'ultimate',
         })
         .select()
         .single();
@@ -203,7 +205,7 @@ export const useUltimateOnlineGame = () => {
         .from('game_rooms')
         .select('*')
         .eq('room_code', roomCode.toUpperCase())
-        .maybeSingle();
+        .maybeSingle() as { data: GameRoom | null; error: any };
 
       if (findError) throw findError;
       if (!roomData) {
@@ -212,34 +214,18 @@ export const useUltimateOnlineGame = () => {
         return;
       }
 
-      // Check if this is an Ultimate game
-      if (roomData.game_id) {
-        console.log('Room data:', roomData);
-        console.log('Looking for game with ID:', roomData.game_id);
+      // Check if this is an Ultimate game by checking the room's game_type
+      console.log('Room data:', roomData);
+      console.log('Room game_type:', roomData.game_type);
 
-        const { data: gameCheck, error: gameCheckError } = await supabase
-          .from('games')
-          .select('moves')
-          .eq('id', roomData.game_id)
-          .maybeSingle();
-
-        console.log('Game check error:', gameCheckError);
-        console.log('Ultimate join - checking game type:', gameCheck);
-
-        const moves = gameCheck?.moves as { gameType?: string } | null;
-        console.log('Parsed moves:', moves);
-        console.log('Game type:', moves?.gameType);
-
-        // Check if this is NOT an ultimate game
-        if (!moves || moves.gameType !== 'ultimate') {
-          console.log('Rejecting: not an ultimate game');
-          setError('This room is for regular Tic Tac Toe');
-          setLoading(false);
-          return;
-        }
-
-        console.log('Validated: this is an ultimate game');
+      if (roomData.game_type !== 'ultimate') {
+        console.log('Rejecting: not an ultimate game, game_type is:', roomData.game_type);
+        setError('This room is for regular Tic Tac Toe');
+        setLoading(false);
+        return;
       }
+
+      console.log('Validated: this is an ultimate game');
 
       if (roomData.status !== 'waiting') {
         setError('Game already in progress');
