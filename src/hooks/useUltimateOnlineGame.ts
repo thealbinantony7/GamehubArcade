@@ -159,12 +159,17 @@ export const useUltimateOnlineGame = () => {
           host_name: hostName,
           game_id: gameData.id,
           status: 'waiting',
-          game_type: 'ultimate',
         })
         .select()
         .single();
 
       if (roomError) throw roomError;
+
+      // Update with game_type separately (workaround for schema cache)
+      await supabase
+        .from('game_rooms')
+        .update({ game_type: 'ultimate' } as any)
+        .eq('id', roomData.id);
 
       setRoom(roomData as GameRoom);
       setGame({
