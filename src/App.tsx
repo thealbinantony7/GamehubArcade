@@ -52,9 +52,10 @@ const App = () => (
               {/* 3. Arcade Routes (Public) */}
               <Route path="/arcade" element={<ArcadeLayout />}>
                 <Route index element={<ArcadeHome />} />
-                {/* Legacy support for direct game links */}
-                <Route path="play/:gameId" element={<PlayGame />} />
               </Route>
+
+              {/* Game Player (Full Screen) */}
+              <Route path="/arcade/play/:gameId" element={<PlayGame />} />
 
               {/* Alias for root /play to /arcade/play to support legacy links if any */}
               <Route path="/play/:gameId" element={<Navigate to="/arcade/play/:gameId" replace />} />
