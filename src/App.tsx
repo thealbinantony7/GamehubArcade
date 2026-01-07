@@ -13,6 +13,7 @@ import LandingPage from "./pages/LandingPage";
 // Casino
 import CasinoLayout from "./pages/casino/CasinoLayout";
 import CasinoHome from "./pages/casino/CasinoHome";
+import CasinoGamePlaceholder from "./pages/casino/CasinoGamePlaceholder";
 
 // Arcade
 import ArcadeLayout from "./pages/arcade/ArcadeLayout";
@@ -63,8 +64,7 @@ const App = () => (
               {/* 4. Casino Routes (Protected) */}
               <Route path="/casino" element={<CasinoLayout />}>
                 <Route index element={<CasinoHome />} />
-                {/* Future: Real Casino Game Components would go here */}
-                {/* <Route path="play/:gameId" element={<CasinoGame />} /> */}
+                <Route path="play/:gameId" element={<CasinoGamePlaceholder />} />
               </Route>
 
               {/* 5. Admin */}

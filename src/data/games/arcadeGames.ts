@@ -1,31 +1,33 @@
 
+import { lazy } from 'react';
 import {
     Grid3X3, Zap, Puzzle, Target, Bird, Gamepad2, Rocket, Brain, Hammer, LayoutGrid
 } from "lucide-react";
 
-// Game Components
-import TicTacToe from "@/components/TicTacToe";
-import { UltimateTicTacToeGame } from "@/components/games/UltimateTicTacToe/UltimateTicTacToeGame";
-import { SnakeGame } from "@/components/games/Snake/SnakeGame";
-import { TetrisGame } from "@/components/games/Tetris/TetrisGame";
-import { BreakoutGame } from "@/components/games/Breakout/BreakoutGame";
-import { FlappyBirdGame } from "@/components/games/FlappyBird/FlappyBirdGame";
-import { PongGame } from "@/components/games/Pong/PongGame";
-import { SpaceInvadersGame } from "@/components/games/SpaceInvaders/SpaceInvadersGame";
-import { SimonSaysGame } from "@/components/games/SimonSays/SimonSaysGame";
-import { WhackAMoleGame } from "@/components/games/WhackAMole/WhackAMoleGame";
+// Lazy load components
+const TicTacToe = lazy(() => import("@/components/TicTacToe"));
+const UltimateTicTacToe = lazy(() => import("@/components/games/UltimateTicTacToe/UltimateTicTacToeGame").then(m => ({ default: m.UltimateTicTacToeGame })));
+const Snake = lazy(() => import("@/components/games/Snake/SnakeGame").then(m => ({ default: m.SnakeGame })));
+const Tetris = lazy(() => import("@/components/games/Tetris/TetrisGame").then(m => ({ default: m.TetrisGame })));
+const Breakout = lazy(() => import("@/components/games/Breakout/BreakoutGame").then(m => ({ default: m.BreakoutGame })));
+const FlappyBird = lazy(() => import("@/components/games/FlappyBird/FlappyBirdGame").then(m => ({ default: m.FlappyBirdGame })));
+const Pong = lazy(() => import("@/components/games/Pong/PongGame").then(m => ({ default: m.PongGame })));
+const SpaceInvaders = lazy(() => import("@/components/games/SpaceInvaders/SpaceInvadersGame").then(m => ({ default: m.SpaceInvadersGame })));
+const SimonSays = lazy(() => import("@/components/games/SimonSays/SimonSaysGame").then(m => ({ default: m.SimonSaysGame })));
+const WhackAMole = lazy(() => import("@/components/games/WhackAMole/WhackAMoleGame").then(m => ({ default: m.WhackAMoleGame })));
 
-export interface ArcadeGame {
+export interface GameDefinition {
     id: string;
     title: string;
     tagline: string;
-    icon: any; // Lucide Icon
+    icon: any;
     color: string;
     hex: string;
-    component: React.ComponentType;
+    component: React.LazyExoticComponent<any>;
+    mode: 'arcade';
 }
 
-export const ARCADE_GAMES: ArcadeGame[] = [
+export const ARCADE_GAMES: GameDefinition[] = [
     {
         id: "tictactoe",
         title: "Tic Tac Toe",
@@ -33,7 +35,8 @@ export const ARCADE_GAMES: ArcadeGame[] = [
         icon: Grid3X3,
         color: "from-blue-500 to-cyan-400",
         hex: "#3b82f6",
-        component: TicTacToe
+        component: TicTacToe,
+        mode: 'arcade'
     },
     {
         id: "ultimatetictactoe",
@@ -42,7 +45,8 @@ export const ARCADE_GAMES: ArcadeGame[] = [
         icon: LayoutGrid,
         color: "from-violet-500 to-fuchsia-400",
         hex: "#8b5cf6",
-        component: UltimateTicTacToeGame
+        component: UltimateTicTacToe,
+        mode: 'arcade'
     },
     {
         id: "snake",
@@ -51,7 +55,8 @@ export const ARCADE_GAMES: ArcadeGame[] = [
         icon: Zap,
         color: "from-green-500 to-emerald-400",
         hex: "#22c55e",
-        component: SnakeGame
+        component: Snake,
+        mode: 'arcade'
     },
     {
         id: "tetris",
@@ -60,7 +65,8 @@ export const ARCADE_GAMES: ArcadeGame[] = [
         icon: Puzzle,
         color: "from-purple-500 to-pink-400",
         hex: "#a855f7",
-        component: TetrisGame
+        component: Tetris,
+        mode: 'arcade'
     },
     {
         id: "breakout",
@@ -69,7 +75,8 @@ export const ARCADE_GAMES: ArcadeGame[] = [
         icon: Target,
         color: "from-orange-500 to-red-400",
         hex: "#f97316",
-        component: BreakoutGame
+        component: Breakout,
+        mode: 'arcade'
     },
     {
         id: "flappybird",
@@ -78,7 +85,8 @@ export const ARCADE_GAMES: ArcadeGame[] = [
         icon: Bird,
         color: "from-yellow-500 to-orange-400",
         hex: "#eab308",
-        component: FlappyBirdGame
+        component: FlappyBird,
+        mode: 'arcade'
     },
     {
         id: "pong",
@@ -87,7 +95,8 @@ export const ARCADE_GAMES: ArcadeGame[] = [
         icon: Gamepad2,
         color: "from-cyan-500 to-blue-400",
         hex: "#06b6d4",
-        component: PongGame
+        component: Pong,
+        mode: 'arcade'
     },
     {
         id: "spaceinvaders",
@@ -96,7 +105,8 @@ export const ARCADE_GAMES: ArcadeGame[] = [
         icon: Rocket,
         color: "from-indigo-500 to-purple-400",
         hex: "#6366f1",
-        component: SpaceInvadersGame
+        component: SpaceInvaders,
+        mode: 'arcade'
     },
     {
         id: "simonsays",
@@ -105,7 +115,8 @@ export const ARCADE_GAMES: ArcadeGame[] = [
         icon: Brain,
         color: "from-pink-500 to-rose-400",
         hex: "#ec4899",
-        component: SimonSaysGame
+        component: SimonSays,
+        mode: 'arcade'
     },
     {
         id: "whackamole",
@@ -114,7 +125,8 @@ export const ARCADE_GAMES: ArcadeGame[] = [
         icon: Hammer,
         color: "from-amber-500 to-yellow-400",
         hex: "#f59e0b",
-        component: WhackAMoleGame
+        component: WhackAMole,
+        mode: 'arcade'
     },
 ];
 

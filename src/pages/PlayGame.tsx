@@ -6,7 +6,7 @@ import DynamicIsland from "@/components/layout/DynamicIsland";
 import ThemeToggle from "@/components/TicTacToe/ThemeToggle";
 import SoundToggle from "@/components/TicTacToe/SoundToggle";
 import { soundManager } from "@/utils/sounds";
-import { getArcadeGame } from "@/arcade/games/registry";
+import { getArcadeGame } from "@/data/games/arcadeGames";
 
 const PlayGame = () => {
   const { gameId } = useParams();
