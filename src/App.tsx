@@ -1,3 +1,4 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -6,32 +7,29 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { ThemeProvider } from "@/contexts/ThemeContext";
 import { AuthProvider } from "@/contexts/AuthContext";
 
-// Landing & Auth
-import GameHub from "./pages/GameHub";
-import Auth from "./pages/Auth";
-import NotFound from "./pages/NotFound";
-import ProfilePage from "./pages/ProfilePage";
+// New Structure
+import LandingPage from "./pages/LandingPage";
 
-// Casino routes (auth required)
+// Casino
 import CasinoLayout from "./pages/casino/CasinoLayout";
 import CasinoHome from "./pages/casino/CasinoHome";
 
-// Arcade routes (no auth required)
+// Arcade
 import ArcadeLayout from "./pages/arcade/ArcadeLayout";
 import ArcadeHome from "./pages/arcade/ArcadeHome";
 
-// Legacy routes (redirect or keep for backwards compat)
-import GamesLibrary from "./pages/GamesLibrary";
+// Legacy / Shared Play Component
 import PlayGame from "./pages/PlayGame";
-import LeaderboardPage from "./pages/LeaderboardPage";
 
-// Admin pages
+// Auth
+import Auth from "./pages/Auth";
+import ProfilePage from "./pages/ProfilePage";
+
+import NotFound from "./pages/NotFound";
+
+// Admin
 import AdminLayout from "./pages/admin/AdminLayout";
 import AdminDashboard from "./pages/admin/AdminDashboard";
-import AdminUsers from "./pages/admin/AdminUsers";
-import AdminGames from "./pages/admin/AdminGames";
-import AdminLeaderboards from "./pages/admin/AdminLeaderboards";
-import AdminSettings from "./pages/admin/AdminSettings";
 
 const queryClient = new QueryClient();
 
@@ -44,66 +42,36 @@ const App = () => (
           <Sonner />
           <BrowserRouter>
             <Routes>
-              {/* ============================================
-                  LANDING PAGE
-                  ============================================ */}
-              <Route path="/" element={<GameHub />} />
+              {/* 1. Landing Page (Mode Selector) */}
+              <Route path="/" element={<LandingPage />} />
 
-              {/* ============================================
-                  AUTH
-                  ============================================ */}
+              {/* 2. Auth */}
               <Route path="/auth" element={<Auth />} />
               <Route path="/profile" element={<ProfilePage />} />
 
-              {/* ============================================
-                  CASINO ROUTES (Auth Required)
-                  - Mode gate (demo/real)
-                  - Wallet integration
-                  - All bets via Edge Functions
-                  ============================================ */}
-              <Route path="/casino" element={<CasinoLayout />}>
-                <Route index element={<CasinoHome />} />
-                {/* Future: Individual game pages */}
-                {/* <Route path="play/:gameId" element={<CasinoGame />} /> */}
-                {/* <Route path="history" element={<BetHistory />} /> */}
-                {/* <Route path="fairness" element={<ProvablyFair />} /> */}
-              </Route>
-
-              {/* ============================================
-                  ARCADE ROUTES (No Auth Required)
-                  - Free to play
-                  - No wallet
-                  - Client-side only
-                  ============================================ */}
+              {/* 3. Arcade Routes (Public) */}
               <Route path="/arcade" element={<ArcadeLayout />}>
                 <Route index element={<ArcadeHome />} />
-                {/* Future: Individual arcade game pages */}
-                {/* <Route path="play/:gameId" element={<ArcadeGame />} /> */}
-                {/* <Route path="leaderboard" element={<ArcadeLeaderboard />} /> */}
+                {/* Legacy support for direct game links */}
+                <Route path="play/:gameId" element={<PlayGame />} />
               </Route>
 
-              {/* ============================================
-                  LEGACY ROUTES (Backward Compatibility)
-                  Redirect to new structure or keep as-is
-                  ============================================ */}
-              <Route path="/games" element={<Navigate to="/arcade" replace />} />
-              <Route path="/play/:gameId" element={<PlayGame />} />
-              <Route path="/leaderboard" element={<LeaderboardPage />} />
+              {/* Alias for root /play to /arcade/play to support legacy links if any */}
+              <Route path="/play/:gameId" element={<Navigate to="/arcade/play/:gameId" replace />} />
 
-              {/* ============================================
-                  ADMIN ROUTES
-                  ============================================ */}
+              {/* 4. Casino Routes (Protected) */}
+              <Route path="/casino" element={<CasinoLayout />}>
+                <Route index element={<CasinoHome />} />
+                {/* Future: Real Casino Game Components would go here */}
+                {/* <Route path="play/:gameId" element={<CasinoGame />} /> */}
+              </Route>
+
+              {/* 5. Admin */}
               <Route path="/admin" element={<AdminLayout />}>
                 <Route index element={<AdminDashboard />} />
-                <Route path="users" element={<AdminUsers />} />
-                <Route path="games" element={<AdminGames />} />
-                <Route path="leaderboards" element={<AdminLeaderboards />} />
-                <Route path="settings" element={<AdminSettings />} />
               </Route>
 
-              {/* ============================================
-                  404 CATCH-ALL
-                  ============================================ */}
+              {/* 404 */}
               <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>

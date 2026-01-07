@@ -1,59 +1,49 @@
+
 import { Link } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
-import { Gamepad2, User } from 'lucide-react';
+import { Gamepad2, User, Coins } from 'lucide-react';
 
-/**
- * Header for arcade section.
- * - No wallet or balance
- * - Optional login (not required to play)
- * - Link to casino
- */
 export default function ArcadeHeader() {
     const { user, profile } = useAuth();
 
     return (
-        <header className="sticky top-0 z-50 border-b border-border bg-background/95 backdrop-blur-xl">
+        <header className="sticky top-0 z-50 border-b border-white/10 bg-[#0a0a0a]/95 backdrop-blur-xl">
             <div className="container mx-auto px-4">
                 <div className="flex h-16 items-center justify-between">
-                    {/* Logo */}
-                    <Link to="/arcade" className="flex items-center gap-2">
-                        <Gamepad2 className="h-6 w-6 text-primary" />
-                        <span className="text-xl font-bold">
-                            GameHub Arcade
-                        </span>
-                    </Link>
+                    {/* Logo & Mode Switcher */}
+                    <div className="flex items-center gap-4">
+                        <Link to="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
+                            <Gamepad2 className="h-6 w-6 text-purple-500" />
+                            <span className="text-lg font-bold text-white hidden sm:block">
+                                GameHub <span className="text-purple-500">Arcade</span>
+                            </span>
+                        </Link>
+                    </div>
 
-                    {/* Center Nav */}
-                    <nav className="hidden md:flex items-center gap-6">
-                        <Link to="/arcade" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-                            All Games
+                    {/* Navigation */}
+                    <nav className="flex items-center gap-2 sm:gap-4">
+                        <Link to="/casino">
+                            <Button variant="ghost" className="text-white/60 hover:text-amber-400 hover:bg-amber-500/10 gap-2">
+                                <Coins className="w-4 h-4" />
+                                <span className="hidden sm:inline">Casino Mode</span>
+                            </Button>
                         </Link>
-                        <Link to="/arcade/leaderboard" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-                            Leaderboard
-                        </Link>
-                        <Link to="/casino" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-                            🎰 Casino
-                        </Link>
-                    </nav>
 
-                    {/* Right Side */}
-                    <div className="flex items-center gap-3">
                         {user ? (
                             <Link to="/profile">
-                                <Button variant="ghost" className="gap-2">
-                                    <div className="h-6 w-6 rounded-full bg-primary/20 flex items-center justify-center">
-                                        <User className="h-3 w-3" />
-                                    </div>
-                                    <span>{profile?.username || 'Profile'}</span>
+                                <Button variant="ghost" size="icon" className="rounded-full bg-white/5 hover:bg-white/10 text-white">
+                                    <User className="h-4 w-4" />
                                 </Button>
                             </Link>
                         ) : (
                             <Link to="/auth">
-                                <Button variant="outline">Sign In</Button>
+                                <Button variant="default" size="sm" className="bg-purple-600 hover:bg-purple-700 text-white">
+                                    Sign In
+                                </Button>
                             </Link>
                         )}
-                    </div>
+                    </nav>
                 </div>
             </div>
         </header>
