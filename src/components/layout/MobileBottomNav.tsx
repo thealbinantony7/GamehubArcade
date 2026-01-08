@@ -11,15 +11,16 @@ export default function MobileBottomNav() {
     const location = useLocation();
 
     const navItems = [
-        { icon: Menu, label: 'Menu', path: '/menu' },
-        { icon: Gamepad2, label: 'Casino', path: '/' },
-        { icon: Home, label: 'PLAY', path: '/', highlight: true },
-        { icon: Trophy, label: 'Sports', path: '/sports' },
-        { icon: MessageCircle, label: 'Chat', path: '/chat' },
+        { icon: Menu, label: 'Menu', path: '/menu', id: 'menu' },
+        { icon: Gamepad2, label: 'Casino', path: '/', id: 'casino' },
+        { icon: Home, label: 'PLAY', path: '/', highlight: true, id: 'play' },
+        { icon: Trophy, label: 'Sports', path: '/sports', id: 'sports' },
+        { icon: MessageCircle, label: 'Chat', path: '/chat', id: 'chat' },
     ];
 
-    const isActive = (path: string) => {
-        if (path === '/') return location.pathname === '/';
+    const isActive = (path: string, id: string) => {
+        if (id === 'play' || id === 'casino') return location.pathname === '/';
+        if (path === '/') return false;
         return location.pathname.startsWith(path);
     };
 
@@ -28,11 +29,11 @@ export default function MobileBottomNav() {
             <div className="flex items-center justify-around h-16 px-2">
                 {navItems.map((item) => {
                     const Icon = item.icon;
-                    const active = isActive(item.path);
+                    const active = isActive(item.path, item.id);
 
                     return (
                         <Link
-                            key={item.path}
+                            key={item.id}
                             to={item.path}
                             className={cn(
                                 "flex flex-col items-center justify-center gap-1 flex-1 h-full transition-all",
@@ -57,3 +58,4 @@ export default function MobileBottomNav() {
         </nav>
     );
 }
+

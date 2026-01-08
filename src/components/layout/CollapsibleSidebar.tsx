@@ -46,8 +46,8 @@ export default function CollapsibleSidebar({ isOpen, onClose }: CollapsibleSideb
             {/* Sidebar */}
             <aside
                 className={cn(
-                    "fixed lg:relative top-0 left-0 h-full w-[280px] bg-[hsl(220,20%,8%)] border-r border-white/5 z-50 transform transition-all duration-300 overflow-y-auto flex flex-col",
-                    isOpen ? "translate-x-0" : "-translate-x-full lg:-translate-x-full"
+                    "hidden lg:flex fixed lg:relative top-0 left-0 h-full w-[280px] bg-[hsl(220,20%,8%)] border-r border-white/5 z-50 transform transition-all duration-300 overflow-y-auto flex-col",
+                    isOpen ? "lg:translate-x-0" : "lg:-translate-x-full"
                 )}
             >
                 {/* Header */}
