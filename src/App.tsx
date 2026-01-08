@@ -1,3 +1,12 @@
+/**
+ * APP — Casino Router
+ * 
+ * Routes:
+ * /              → Home (Casino)
+ * /play/:gameId  → Universal Game Shell
+ * /auth          → Auth
+ * /admin         → Admin
+ */
 
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -7,25 +16,13 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { ThemeProvider } from "@/contexts/ThemeContext";
 import { AuthProvider } from "@/contexts/AuthContext";
 
-// New Structure
-import LandingPage from "./pages/LandingPage";
-
-// Casino
-import CasinoLayout from "./pages/casino/CasinoLayout";
-import CasinoHome from "./pages/casino/CasinoHome";
-import CasinoGamePlaceholder from "./pages/casino/CasinoGamePlaceholder";
-
-// Arcade
-import ArcadeLayout from "./pages/arcade/ArcadeLayout";
-import ArcadeHome from "./pages/arcade/ArcadeHome";
-
-// Legacy / Shared Play Component
-import PlayGame from "./pages/PlayGame";
-
-// Auth
+// Pages
+import Home from "./pages/Home";
+import Play from "./pages/Play";
 import Auth from "./pages/Auth";
 import ProfilePage from "./pages/ProfilePage";
-
+import Leaderboard from "./pages/Leaderboard";
+import Promotions from "./pages/Promotions";
 import NotFound from "./pages/NotFound";
 
 // Admin
@@ -43,34 +40,26 @@ const App = () => (
           <Sonner />
           <BrowserRouter>
             <Routes>
-              {/* 1. Landing Page (Mode Selector) */}
-              <Route path="/" element={<LandingPage />} />
+              {/* Main Routes */}
+              <Route path="/" element={<Home />} />
+              <Route path="/play/:gameId" element={<Play />} />
+              <Route path="/leaderboard" element={<Leaderboard />} />
+              <Route path="/promotions" element={<Promotions />} />
 
-              {/* 2. Auth */}
+              {/* Auth */}
               <Route path="/auth" element={<Auth />} />
               <Route path="/profile" element={<ProfilePage />} />
 
-              {/* 3. Arcade Routes (Public) */}
-              <Route path="/arcade" element={<ArcadeLayout />}>
-                <Route index element={<ArcadeHome />} />
-              </Route>
-
-              {/* Game Player (Full Screen) */}
-              <Route path="/arcade/play/:gameId" element={<PlayGame />} />
-
-              {/* Alias for root /play to /arcade/play to support legacy links if any */}
-              <Route path="/play/:gameId" element={<Navigate to="/arcade/play/:gameId" replace />} />
-
-              {/* 4. Casino Routes (Protected) */}
-              <Route path="/casino" element={<CasinoLayout />}>
-                <Route index element={<CasinoHome />} />
-                <Route path="play/:gameId" element={<CasinoGamePlaceholder />} />
-              </Route>
-
-              {/* 5. Admin */}
+              {/* Admin */}
               <Route path="/admin" element={<AdminLayout />}>
                 <Route index element={<AdminDashboard />} />
               </Route>
+
+              {/* Legacy route redirects */}
+              <Route path="/arcade" element={<Navigate to="/" replace />} />
+              <Route path="/arcade/*" element={<Navigate to="/" replace />} />
+              <Route path="/casino" element={<Navigate to="/" replace />} />
+              <Route path="/casino/*" element={<Navigate to="/" replace />} />
 
               {/* 404 */}
               <Route path="*" element={<NotFound />} />
