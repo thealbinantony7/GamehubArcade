@@ -66,7 +66,7 @@ export default function FeaturedCarousel({ games }: FeaturedCarouselProps) {
                     return (
                         <div
                             key={game.id}
-                            onClick={() => navigate(`/play/${game.id}`)}
+                            onClick={() => navigate(`/casino/${game.id}`)}
                             className="group/card relative flex-shrink-0 w-[320px] h-[180px] bg-gradient-to-br from-[hsl(220,16%,16%)] to-[hsl(220,16%,12%)] rounded-2xl overflow-hidden cursor-pointer shadow-lg hover:shadow-2xl transition-all duration-300 border border-white/5 hover:border-white/10"
                         >
                             {/* Graphic Background (CSS Art) */}

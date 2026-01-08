@@ -33,7 +33,7 @@ export default function GameGrid({ games }: GameGridProps) {
             {games.map(game => (
                 <div
                     key={game.id}
-                    onClick={() => navigate(`/play/${game.id}`)}
+                    onClick={() => navigate(`/casino/${game.id}`)}
                     className="group relative bg-[#1A1D24] rounded-xl overflow-hidden cursor-pointer hover:-translate-y-1 transition-transform duration-200 shadow-lg hover:shadow-[0_8px_20px_rgba(0,0,0,0.5)] border border-white/5"
                 >
                     {/* Graphic Thumbnail (Replaces Icon) */}

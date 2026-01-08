@@ -100,11 +100,11 @@ export default function CollapsibleSidebar({ isOpen, onClose }: CollapsibleSideb
                         </div>
                         {GAMES.map(game => {
                             const Icon = game.icon;
-                            const isActive = location.pathname === `/play/${game.id}`;
+                            const isActive = location.pathname === `/casino/${game.id}`;
                             return (
                                 <Link
                                     key={game.id}
-                                    to={`/play/${game.id}`}
+                                    to={`/casino/${game.id}`}
                                     className={cn(
                                         "flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 group",
                                         isActive

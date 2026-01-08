@@ -2,8 +2,8 @@
  * APP — Casino Router
  * 
  * Routes:
- * /              → Home (Casino)
- * /play/:gameId  → Universal Game Shell
+ * /              → Home (Lobby with AppShell)
+ * /casino/:gameId → Home + GameTheater overlay
  * /auth          → Auth
  * /admin         → Admin
  */
@@ -18,7 +18,6 @@ import { AuthProvider } from "@/contexts/AuthContext";
 
 // Pages
 import Home from "./pages/Home";
-import Play from "./pages/Play";
 import Auth from "./pages/Auth";
 import ProfilePage from "./pages/ProfilePage";
 import Leaderboard from "./pages/Leaderboard";
@@ -40,9 +39,9 @@ const App = () => (
           <Sonner />
           <BrowserRouter>
             <Routes>
-              {/* Main Routes */}
+              {/* Main Routes - All use AppShell */}
               <Route path="/" element={<Home />} />
-              <Route path="/play/:gameId" element={<Play />} />
+              <Route path="/casino/:gameId" element={<Home />} />
               <Route path="/leaderboard" element={<Leaderboard />} />
               <Route path="/promotions" element={<Promotions />} />
 
@@ -56,10 +55,9 @@ const App = () => (
               </Route>
 
               {/* Legacy route redirects */}
+              <Route path="/play/:gameId" element={<Navigate to="/casino/:gameId" replace />} />
               <Route path="/arcade" element={<Navigate to="/" replace />} />
               <Route path="/arcade/*" element={<Navigate to="/" replace />} />
-              <Route path="/casino" element={<Navigate to="/" replace />} />
-              <Route path="/casino/*" element={<Navigate to="/" replace />} />
 
               {/* 404 */}
               <Route path="*" element={<NotFound />} />
