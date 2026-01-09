@@ -3,7 +3,7 @@
  * 
  * Routes:
  * /              → Home (Lobby with AppShell)
- * /casino/:gameId → Home + GameTheater overlay
+ * /casino/:gameId → Game (Dedicated game page, lobby unmounts)
  * /auth          → Auth
  * /admin         → Admin
  */
@@ -18,6 +18,7 @@ import { AuthProvider } from "@/contexts/AuthContext";
 
 // Pages
 import Home from "./pages/Home";
+import Game from "./pages/Game";
 import Auth from "./pages/Auth";
 import ProfilePage from "./pages/ProfilePage";
 import Leaderboard from "./pages/Leaderboard";
@@ -39,9 +40,9 @@ const App = () => (
           <Sonner />
           <BrowserRouter>
             <Routes>
-              {/* Main Routes - All use AppShell */}
+              {/* Main Routes */}
               <Route path="/" element={<Home />} />
-              <Route path="/casino/:gameId" element={<Home />} />
+              <Route path="/casino/:gameId" element={<Game />} />
               <Route path="/leaderboard" element={<Leaderboard />} />
               <Route path="/promotions" element={<Promotions />} />
 

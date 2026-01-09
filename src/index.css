@@ -11,14 +11,23 @@
 
 @layer base {
   :root {
-    /* Background (dark blue/charcoal) */
+    /* Obsidian Palette (Base) */
     --bg-base: 220 20% 8%;
-    --bg-panel: 220 18% 11%;
-    --bg-card: 220 16% 14%;
+    /* #0f1218 */
+    --bg-obsidian: 0 0% 5%;
+    /* #0d0d0d - Deepest Base */
+    --bg-surface: 220 18% 11%;
+    /* #171b21 - Standard Surface */
+    --bg-highlight: 220 16% 14%;
+    /* #1e232b - Hover/Card */
 
     /* Primary (Casino Red) */
     --primary: 0 85% 55%;
     --primary-hover: 0 90% 60%;
+
+    /* Glass Utilities */
+    --glass-border: 0 0% 100% / 0.08;
+    --glass-surface: 220 20% 12% / 0.6;
 
     /* Accents */
     --win-green: 145 70% 45%;
@@ -27,23 +36,22 @@
     /* Text */
     --text: 0 0% 95%;
     --text-muted: 0 0% 60%;
+    --text-dim: 0 0% 40%;
 
-    /* Borders */
-    --border: 0 0% 100% / 0.05;
-
-    /* Shadcn */
-    --background: var(--bg-base);
-    --foreground: var(--text);
-    --card: var(--bg-panel);
-    --card-foreground: var(--text);
-    --popover: var(--bg-card);
-    --popover-foreground: var(--text);
-    --muted: var(--bg-card);
-    --muted-foreground: var(--text-muted);
-    --destructive: var(--primary);
-    --destructive-foreground: var(--text);
-    --ring: var(--primary);
+    /* Global Radius */
     --radius: 12px;
+
+    /* Z-Index Scale */
+    --z-lobby: 0;
+    --z-sidebar: 10;
+    --z-theater: 40;
+    --z-modal: 60;
+    --z-bottom-nav: 70;
+    --z-toast: 80;
+  }
+
+  .theater-open {
+    overflow: hidden;
   }
 
   .dark {
@@ -51,25 +59,45 @@
   }
 
   * {
-    border-color: hsl(var(--border));
+    border-color: hsl(var(--glass-border));
   }
 
   html {
     font-family: 'Inter', system-ui, sans-serif;
-    background: hsl(var(--bg-base));
+    background: hsl(var(--bg-obsidian));
   }
 
   body {
-    background: hsl(var(--bg-base));
+    background: hsl(var(--bg-obsidian));
     color: hsl(var(--text));
+  }
+}
+
+@layer components {
+
+  /* Liquid Glass Primitives */
+  .glass-panel {
+    @apply bg-black/40 backdrop-filter backdrop-blur-xl border border-white/5 shadow-2xl;
+  }
+
+  .glass-card {
+    @apply bg-[#14161b] border border-white/5 transition-all duration-300;
+  }
+
+  .glass-card:hover {
+    @apply border-white/10 shadow-[0_0_20px_rgba(0, 0, 0, 0.5)] translate-y-[-2px];
+  }
+
+  .text-glow {
+    text-shadow: 0 0 10px currentColor;
   }
 }
 
 /* Scrollbar */
 @layer base {
   ::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
+    width: 6px;
+    height: 6px;
   }
 
   ::-webkit-scrollbar-track {
@@ -78,14 +106,13 @@
 
   ::-webkit-scrollbar-thumb {
     background: hsl(0 0% 100% / 0.1);
-    border-radius: 4px;
+    border-radius: 99px;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    background: hsl(0 0% 100% / 0.15);
+    background: hsl(0 0% 100% / 0.2);
   }
 
-  /* Hide scrollbar for carousel */
   .scrollbar-hide::-webkit-scrollbar {
     display: none;
   }
@@ -101,8 +128,95 @@
     animation: fadeIn 0.5s ease-out forwards;
   }
 
-  .animate-scroll {
-    animation: scroll 30s linear infinite;
+  .perspective-1000 {
+    perspective: 1000px;
+  }
+
+  .backface-hidden {
+    backface-visibility: hidden;
+  }
+
+  /* Infinite Scroll Ticker */
+  .animate-ticker {
+    animation: ticker 40s linear infinite;
+  }
+
+  .animate-ticker:hover {
+    animation-play-state: paused;
+  }
+
+  /* Skeleton / Loading Shimmer */
+  .animate-shimmer {
+    background: linear-gradient(90deg,
+        rgba(255, 255, 255, 0) 0%,
+        rgba(255, 255, 255, 0.05) 50%,
+        rgba(255, 255, 255, 0) 100%);
+    background-size: 200% 100%;
+    animation: shimmer 2s infinite;
+  }
+
+  /* Entry Flash (New Data) */
+  .animate-flash {
+    animation: flash 1s ease-out forwards;
+  }
+
+  /* Gentle Pulse (Live Status) */
+  .animate-pulse-slow {
+    animation: pulseSlow 3s ease-in-out infinite;
+  }
+
+  @keyframes userEntry {
+    0% {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes ticker {
+    0% {
+      transform: translateX(0);
+    }
+
+    100% {
+      transform: translateX(-50%);
+    }
+  }
+
+  @keyframes shimmer {
+    0% {
+      background-position: 200% 0;
+    }
+
+    100% {
+      background-position: -200% 0;
+    }
+  }
+
+  @keyframes flash {
+    0% {
+      background-color: rgba(34, 197, 94, 0.2);
+    }
+
+    100% {
+      background-color: transparent;
+    }
+  }
+
+  @keyframes pulseSlow {
+
+    0%,
+    100% {
+      opacity: 1;
+    }
+
+    50% {
+      opacity: 0.6;
+    }
   }
 
   @keyframes fadeIn {
@@ -114,16 +228,6 @@
     to {
       opacity: 1;
       transform: translateY(0);
-    }
-  }
-
-  @keyframes scroll {
-    0% {
-      transform: translateX(0);
-    }
-
-    100% {
-      transform: translateX(-50%);
     }
   }
 }

@@ -4,12 +4,12 @@
  * Creates FOMO and social proof
  */
 
-import { GameDefinition } from "@/data/games";
 import { cn } from "@/lib/utils";
 import { useEffect, useState } from "react";
 
 // Fake users for the feed
-const USERS = ["Hidden", "Anon", "Player1", "Whale", "Sniper", "Lucky"];
+const USERS = ["Hidden", "Anon", "Player1", "Whale", "Sniper", "Lucky", "HighRoller", "VipUser"];
+const GAMES = ["Crash", "Dice", "Mines", "Plinko", "Slots", "Roulette"];
 
 interface WinEvent {
     id: number;
@@ -20,45 +20,57 @@ interface WinEvent {
 }
 
 export default function LiveWinsTicker() {
-    const [wins, setWins] = useState<WinEvent[]>([
-        { id: 1, user: "Anon", game: "Crash", amount: 120.50, color: "text-[hsl(0,85%,60%)]" },
-        { id: 2, user: "Player8", game: "Plinko", amount: 15.00, color: "text-[hsl(200,70%,60%)]" },
-        { id: 3, user: "Hidden", game: "Mines", amount: 450.00, color: "text-[hsl(30,80%,55%)]" },
-        { id: 4, user: "Wolf", game: "Dice", amount: 90.25, color: "text-[hsl(280,70%,60%)]" },
-        { id: 5, user: "Whale", game: "Crash", amount: 2500.00, color: "text-[hsl(0,85%,60%)]" },
-    ]);
+    // Fill initial state with enough items to span a wide screen
+    const [wins, setWins] = useState<WinEvent[]>(() =>
+        Array.from({ length: 20 }).map((_, i) => ({
+            id: i,
+            user: USERS[Math.floor(Math.random() * USERS.length)],
+            game: GAMES[Math.floor(Math.random() * GAMES.length)],
+            amount: Math.floor(Math.random() * 500) + 10,
+            color: "text-[hsl(145,70%,45%)]"
+        }))
+    );
 
-    // Simulate new wins coming in
-    useEffect(() => {
-        const interval = setInterval(() => {
-            const newWin = {
-                id: Date.now(),
-                user: USERS[Math.floor(Math.random() * USERS.length)],
-                game: ["Crash", "Dice", "Mines", "Plinko"][Math.floor(Math.random() * 4)],
-                amount: Math.floor(Math.random() * 500) + 10,
-                color: "text-[#00E701]" // Standard win green for uniformity in ticker
-            };
-            setWins(prev => [newWin, ...prev.slice(0, 8)]);
-        }, 3000);
-        return () => clearInterval(interval);
-    }, []);
+    // Simulate new wins coming in (optional for marquee, but good for liveness)
+    // For a pure CSS marquee, we often don't want to re-render the list constantly 
+    // because it resets the CSS animation.
+    // STRATEGY: For Phase 3, we keep the list static-ish or append carefully.
+    // To keep it simple and smooth: Just a static loop of 20 items is enough 'ambient' motion.
+    // If we want 'live' updates, we'd need a JS-driven ticker or a complex CSS swap.
+    // Let's stick to the 'Ambient Motion' goal: A smooth, un-janking stream.
 
     return (
-        <div className="w-full overflow-hidden bg-[hsl(220,20%,7%)] border-b border-white/5 py-1">
-            <div className="flex gap-4 animate-scroll whitespace-nowrap px-4">
-                {/* Duplicate logic for infinite scroll would happen here, but CSS marquee is easier */}
-                {/* For now, just a flex row that updates */}
-                {[...wins, ...wins].map((win, i) => (
-                    <div key={`${win.id}-${i}`} className="inline-flex items-center gap-2 bg-white/5 px-3 py-1 rounded-full border border-white/5 text-xs">
-                        <span className="text-white/40">{win.user}</span>
-                        <span className="text-white/60">on {win.game}</span>
-                        <span className={cn("font-bold", win.amount > 100 ? "text-[hsl(145,70%,45%)]" : "text-white")}>
-                            ${win.amount.toFixed(2)}
-                        </span>
-                    </div>
-                ))}
+        <div className="w-full overflow-hidden bg-[hsl(220,20%,8%)] border-b border-white/5 py-1.5 relative z-10">
+            {/* Gradient Masks for Fade In/Out */}
+            <div className="absolute left-0 top-0 bottom-0 w-16 bg-gradient-to-r from-[hsl(220,20%,8%)] to-transparent z-20 pointer-events-none" />
+            <div className="absolute right-0 top-0 bottom-0 w-16 bg-gradient-to-l from-[hsl(220,20%,8%)] to-transparent z-20 pointer-events-none" />
+
+            <div className="flex animate-ticker w-max hover:pause">
+                {/* original list */}
+                <div className="flex gap-4 px-2">
+                    {wins.map((win, i) => (
+                        <TickerItem key={`orig-${win.id}-${i}`} win={win} />
+                    ))}
+                </div>
+                {/* duplicated list for seamless loop */}
+                <div className="flex gap-4 px-2">
+                    {wins.map((win, i) => (
+                        <TickerItem key={`dupe-${win.id}-${i}`} win={win} />
+                    ))}
+                </div>
             </div>
-            {/* Note: In a real prod environment, use a marquee library. simplified here. */}
         </div>
     );
+}
+
+function TickerItem({ win }: { win: WinEvent }) {
+    return (
+        <div className="inline-flex items-center gap-2 bg-white/5 px-3 py-1 rounded-full border border-white/5 text-xs whitespace-nowrap hover:bg-white/10 transition-colors cursor-default">
+            <span className="text-white/40 font-medium">{win.user}</span>
+            <span className="text-white/60">on {win.game}</span>
+            <span className={cn("font-bold text-[hsl(145,70%,45%)]")}>
+                ${win.amount.toFixed(2)}
+            </span>
+        </div>
+    )
 }

@@ -3,9 +3,12 @@
  * Logo + Nav + Game List
  */
 
+import { memo } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Diamond, Home, Trophy, Gift, Dices, TrendingUp, CircleDot, Bomb, Disc, Spade, Ticket, Gamepad2, Sparkles } from 'lucide-react';
 import { cn } from '@/lib/utils';
+
+// ... (constants stay same) ...
 
 const NAV_ITEMS = [
     { label: 'Lobby', icon: Home, path: '/' },
@@ -25,11 +28,11 @@ const GAMES = [
     { id: 'slots', label: 'Slots', icon: Ticket },
 ];
 
-export default function Sidebar() {
+function Sidebar() {
     const location = useLocation();
 
     return (
-        <aside className="hidden lg:flex flex-col w-64 bg-[hsl(220,20%,8%)] border-r border-white/5 h-screen sticky top-0 z-30">
+        <aside className="hidden lg:flex flex-col w-64 bg-[hsl(220,20%,8%)] border-r border-white/5 h-screen sticky top-0 z-[var(--z-sidebar)]">
             {/* Logo */}
             <Link to="/" className="flex items-center gap-3 px-6 py-6 transition-opacity hover:opacity-80">
                 <div className="h-9 w-9 rounded-xl bg-gradient-to-br from-[hsl(0,85%,55%)] to-[hsl(0,85%,45%)] flex items-center justify-center shadow-[0_0_20px_hsla(0,85%,55%,0.3)]">
@@ -94,3 +97,5 @@ export default function Sidebar() {
         </aside>
     );
 }
+
+export default memo(Sidebar);

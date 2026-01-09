@@ -3,11 +3,12 @@
  * Fixed bottom bar for mobile. Replaces hamburger for core navigation.
  */
 
+import { memo } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Home, Gamepad2, Trophy, MessageCircle, Menu } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
-export default function MobileBottomNav() {
+function MobileBottomNav() {
     const location = useLocation();
 
     const navItems = [
@@ -25,7 +26,7 @@ export default function MobileBottomNav() {
     };
 
     return (
-        <nav className="lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-[hsl(220,20%,8%)]/95 backdrop-blur-xl border-t border-white/5">
+        <nav className="lg:hidden fixed bottom-0 left-0 right-0 z-[var(--z-bottom-nav)] bg-[hsl(220,20%,8%)]/95 backdrop-blur-xl border-t border-white/5 pb-[env(safe-area-inset-bottom)]">
             <div className="flex items-center justify-around h-16 px-2">
                 {navItems.map((item) => {
                     const Icon = item.icon;
@@ -58,4 +59,6 @@ export default function MobileBottomNav() {
         </nav>
     );
 }
+
+export default memo(MobileBottomNav);
 

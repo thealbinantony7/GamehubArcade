@@ -3,6 +3,7 @@
  * Search, Balance Pill, Deposit/Register, Sign In
  */
 
+import { memo } from 'react';
 import { Link } from 'react-router-dom';
 import { Search, Wallet } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
@@ -24,7 +25,7 @@ export function HamburgerButton({ onClick }: { onClick: () => void }) {
     );
 }
 
-export default function TopBar({ onMenuClick, showMenuButton = true }: { onMenuClick?: () => void; showMenuButton?: boolean }) {
+function TopBar({ onMenuClick, showMenuButton = true }: { onMenuClick?: () => void; showMenuButton?: boolean }) {
     const { user } = useAuth();
     const demoBalance = 1000.00; // Demo balance for non-logged users
 
@@ -98,3 +99,5 @@ export default function TopBar({ onMenuClick, showMenuButton = true }: { onMenuC
         </div>
     );
 }
+
+export default memo(TopBar);
