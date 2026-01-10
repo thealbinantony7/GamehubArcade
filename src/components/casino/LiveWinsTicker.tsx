@@ -64,12 +64,19 @@ export default function LiveWinsTicker() {
 }
 
 function TickerItem({ win }: { win: WinEvent }) {
+    const multiplier = (win.amount / 100).toFixed(2); // Mock multiplier
+    const profit = win.amount;
+
     return (
         <div className="inline-flex items-center gap-2 bg-white/5 px-3 py-1 rounded-full border border-white/5 text-xs whitespace-nowrap hover:bg-white/10 transition-colors cursor-default">
             <span className="text-white/40 font-medium">{win.user}</span>
-            <span className="text-white/60">on {win.game}</span>
-            <span className="font-bold text-brand-gold-accent font-mono tabular-nums">
-                ${win.amount.toFixed(2)}
+            <span className="text-white/60">•</span>
+            <span className="text-white/60">{win.game}</span>
+            <span className="text-white/60">•</span>
+            <span className="text-white/80 font-mono tabular-nums">x{multiplier}</span>
+            <span className="text-white/60">→</span>
+            <span className="font-bold text-green-500 font-mono tabular-nums">
+                +${profit.toFixed(2)}
             </span>
         </div>
     )

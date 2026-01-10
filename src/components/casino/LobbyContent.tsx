@@ -8,7 +8,7 @@ import { Sparkles, Gamepad2, Disc, LayoutGrid, Flame, Zap, Trophy, TrendingUp } 
 import { getAllGames } from '@/data/games';
 import PromoBanner from '@/components/casino/PromoBanner';
 import LiveWinsTicker from '@/components/casino/LiveWinsTicker';
-import RecentBets from '@/components/casino/RecentBets';
+import RoundAuditTable from '@/components/casino/RoundAuditTable';
 import TrendingRow from '@/components/casino/TrendingRow';
 import GameRow from '@/components/casino/GameRow';
 import { cn } from '@/lib/utils';
@@ -138,7 +138,7 @@ export default function LobbyContent() {
                         <h2 className="text-sm font-bold text-white uppercase tracking-widest">Live Feed</h2>
                     </div>
                     <div className="glass-panel rounded-xl overflow-hidden border border-white/5">
-                        <RecentBets />
+                        <RoundAuditTable />
                     </div>
                 </div>
             </div>

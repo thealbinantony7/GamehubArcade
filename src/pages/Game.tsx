@@ -8,6 +8,10 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft, TrendingUp } from 'lucide-react';
 import { getGame } from '@/data/games';
 import { useState } from 'react';
+import GameTrustHeader from '@/components/casino/GameTrustHeader';
+import TrustStatusBar from '@/components/casino/TrustStatusBar';
+import VerifyDrawer from '@/components/casino/VerifyDrawer';
+import { useWalletStore } from '@/store/wallet.store';
 
 const GameSkeleton = ({ color }: { color: string }) => (
     <div className="relative w-full max-w-4xl aspect-video bg-[hsl(220,20%,8%)] rounded-2xl border border-white/5 overflow-hidden shadow-2xl">
@@ -49,16 +53,19 @@ export default function GamePage() {
     const { gameId } = useParams<{ gameId: string }>();
     const navigate = useNavigate();
     const game = gameId ? getGame(gameId) : undefined;
-    const [balance] = useState(1234.56);
+    const balance = useWalletStore(state => state.balance);
     const [isLoading, setIsLoading] = useState(true);
+    const [verifyDrawerOpen, setVerifyDrawerOpen] = useState(false);
 
     if (!game) {
         navigate('/');
         return null;
     }
 
+    const houseEdge = 100 - (game.rtp || 99);
+
     return (
-        <div className="min-h-screen bg-[hsl(220,20%,3%)] flex flex-col font-sans">
+        <div className="min-h-screen bg-[hsl(220,20%,3%)] flex flex-col font-sans pb-8 relative">
             {/* Collapsed Shell Header */}
             <header className="sticky top-0 z-50 bg-[#141b26]/80 backdrop-blur-xl border-b border-white/5">
                 <div className="max-w-[1920px] mx-auto flex items-center justify-between px-4 md:px-6 py-3">
@@ -71,33 +78,46 @@ export default function GamePage() {
                         <span className="text-xs md:text-sm font-medium uppercase tracking-wider">Lobby</span>
                     </button>
 
-                    {/* Center: Game Identity */}
-                    <div className="absolute left-1/2 -translate-x-1/2 flex items-center gap-3">
-                        <div className="flex items-center gap-3 px-4 py-1.5 bg-white/5 rounded-full border border-white/5">
-                            <game.icon
-                                className="h-4 w-4"
-                                style={{ color: game.hex }}
-                            />
-                            <span className="text-sm font-bold text-white hidden sm:block">{game.name}</span>
-                        </div>
+                    {/* Center: Game Trust Header (Replaces simple title) */}
+                    <div className="absolute left-1/2 -translate-x-1/2 hidden md:block w-full max-w-2xl px-4">
+                        <GameTrustHeader
+                            gameName={game.name}
+                            rtp={game.rtp || 99}
+                            houseEdge={houseEdge}
+                            onVerifyClick={() => setVerifyDrawerOpen(true)}
+                        />
+                    </div>
+                    {/* Mobile fallback for title if needed, or rely on GameTrustHeader responsiveness */}
+                    <div className="md:hidden flex items-center gap-2">
+                        <span className="text-sm font-bold text-white">{game.name}</span>
                     </div>
 
                     {/* Right: Wallet & Actions */}
                     <div className="flex items-center gap-3">
                         {/* Balance */}
-                        <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 bg-black/40 rounded-lg border border-white/5">
-                            <span className="text-xs text-white/40 font-medium uppercase mr-1">Balance</span>
+                        <div className="flex items-center gap-2 px-3 py-1.5 bg-black/40 rounded-lg border border-white/5">
+                            <span className="text-xs text-white/40 font-medium uppercase mr-1 hidden sm:inline">Balance</span>
                             <span className="text-sm font-bold text-white font-mono tabular-nums">
                                 ${balance.toFixed(2)}
                             </span>
                         </div>
 
                         {/* Deposit */}
-                        <button className="flex items-center gap-2 px-4 py-2 bg-brand-red-base hover:bg-brand-red-deep rounded-lg shadow-red-glow hover:shadow-[0_0_30px_rgba(239,68,68,0.6)] transition-all transform hover:scale-105">
+                        <button className="flex items-center gap-2 px-4 py-2 bg-brand-red-base hover:bg-brand-red-deep rounded-lg shadow-red-glow hover:shadow-[0_0_30px_rgba(239,68,68,0.6)] transition-all transform hover:scale-105 active:scale-95">
                             <TrendingUp className="w-4 h-4 text-white" />
                             <span className="text-sm font-bold text-white sm:inline hidden">Deposit</span>
                         </button>
                     </div>
+                </div>
+
+                {/* Mobile Game Trust Header (Stacked) */}
+                <div className="md:hidden border-t border-white/5">
+                    <GameTrustHeader
+                        gameName={game.name}
+                        rtp={game.rtp || 99}
+                        houseEdge={houseEdge}
+                        onVerifyClick={() => setVerifyDrawerOpen(true)}
+                    />
                 </div>
             </header>
 
@@ -119,33 +139,11 @@ export default function GamePage() {
                 </div>
             </main>
 
-            {/* Bottom Stats Footer */}
-            <footer className="bg-[#0f141c] border-t border-white/5 px-6 py-2.5 z-40">
-                <div className="max-w-[1920px] mx-auto flex items-center justify-between text-xs font-medium text-white/40">
-                    <div className="flex items-center gap-6">
-                        <div className="flex items-center gap-2 pl-2">
-                            <div className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse shadow-[0_0_8px_rgba(34,197,94,0.5)]" />
-                            <span className="text-green-500 font-bold tracking-wide uppercase">Live Connected</span>
-                        </div>
-                        <div className="hidden md:block w-px h-3 bg-white/10" />
-                        <div className="hidden md:flex gap-1">
-                            <span>Hash:</span>
-                            <span className="text-white/20 font-mono">7x8...9z2</span>
-                        </div>
-                    </div>
+            {/* Footer Trust Bar - Persistent */}
+            <TrustStatusBar onVerifyClick={() => setVerifyDrawerOpen(true)} />
 
-                    <div className="flex items-center gap-6">
-                        <div className="flex gap-1">
-                            <span>RTP</span>
-                            <span className="text-white">99.0%</span>
-                        </div>
-                        <div className="flex gap-1">
-                            <span>Max Win</span>
-                            <span className="text-white">10,000x</span>
-                        </div>
-                    </div>
-                </div>
-            </footer>
+            {/* Verify Drawer */}
+            <VerifyDrawer isOpen={verifyDrawerOpen} onClose={() => setVerifyDrawerOpen(false)} />
         </div>
     );
 }

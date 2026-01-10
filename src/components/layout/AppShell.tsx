@@ -8,6 +8,8 @@ import { useLocation } from 'react-router-dom';
 import TopBar from './TopBar';
 import CollapsibleSidebar from './CollapsibleSidebar';
 import MobileBottomNav from './MobileBottomNav';
+import TrustStatusBar from '../casino/TrustStatusBar';
+import VerifyDrawer from '../casino/VerifyDrawer';
 
 interface AppShellProps {
     children: ReactNode;
@@ -16,9 +18,12 @@ interface AppShellProps {
 export default function AppShell({ children }: AppShellProps) {
     const location = useLocation();
     const [sidebarOpen, setSidebarOpen] = useState(false); // Mobile only state
+    const [verifyDrawerOpen, setVerifyDrawerOpen] = useState(false);
 
     const handleSidebarClose = useCallback(() => setSidebarOpen(false), []);
     const handleSidebarOpen = useCallback(() => setSidebarOpen(true), []);
+    const handleVerifyOpen = useCallback(() => setVerifyDrawerOpen(true), []);
+    const handleVerifyClose = useCallback(() => setVerifyDrawerOpen(false), []);
 
     // Check if we're in a game route for potential specific styling (optional)
     const isGameRoute = location.pathname.startsWith('/casino/');
@@ -48,7 +53,13 @@ export default function AppShell({ children }: AppShellProps) {
 
                 {/* Mobile Bottom Navigation */}
                 <MobileBottomNav />
+
+                {/* Trust Status Bar */}
+                <TrustStatusBar onVerifyClick={handleVerifyOpen} />
             </div>
+
+            {/* Verify Drawer */}
+            <VerifyDrawer isOpen={verifyDrawerOpen} onClose={handleVerifyClose} />
         </div>
     );
 }

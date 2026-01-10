@@ -18,7 +18,9 @@
     --z-sidebar: 10;
     --z-theater: 40;
     --z-modal: 60;
-    --z-bottom-nav: 70;
+    --z-trust-bar: 65;
+    --z-verify-drawer: 70;
+    --z-bottom-nav: 75;
     --z-toast: 80;
   }
 

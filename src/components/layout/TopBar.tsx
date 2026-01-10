@@ -8,6 +8,7 @@ import { Link } from 'react-router-dom';
 import { Search, Wallet } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { cn } from '@/lib/utils';
+import { useWalletStore } from '@/store/wallet.store';
 
 export function HamburgerButton({ onClick }: { onClick: () => void }) {
     return (
@@ -27,7 +28,7 @@ export function HamburgerButton({ onClick }: { onClick: () => void }) {
 
 function TopBar({ onMenuClick, showMenuButton = true }: { onMenuClick?: () => void; showMenuButton?: boolean }) {
     const { user } = useAuth();
-    const demoBalance = 1000.00; // Demo balance for non-logged users
+    const balance = useWalletStore(state => state.balance);
 
     return (
         <div className="sticky top-0 z-40 bg-[hsl(220,20%,8%)]/80 backdrop-blur-xl border-b border-white/5 supports-[backdrop-filter]:bg-[hsl(220,20%,8%)]/60 relative">
@@ -64,7 +65,7 @@ function TopBar({ onMenuClick, showMenuButton = true }: { onMenuClick?: () => vo
                     <div className="flex items-center gap-2 h-10 px-3 md:px-4 bg-white/5 border border-white/10 rounded-lg">
                         <Wallet className="h-4 w-4 text-brand-red-base" />
                         <span className="text-xs md:text-sm font-semibold text-white font-mono tabular-nums">
-                            ${user ? '0.00' : demoBalance.toFixed(2)}
+                            ${balance.toFixed(2)}
                         </span>
                     </div>
 

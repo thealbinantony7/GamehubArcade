@@ -16,6 +16,7 @@ export interface GameDefinition {
     icon: LucideIcon;
     hex: string;
     status: GameStatus;
+    rtp: number;
 }
 
 export const GAMES: GameDefinition[] = [
@@ -26,8 +27,9 @@ export const GAMES: GameDefinition[] = [
         tagline: "Roll over/under",
         category: "originals",
         icon: Dices,
-        hex: "hsl(280, 70%, 55%)",  // Purple
+        hex: "hsl(280, 70%, 55%)",
         status: "coming_soon",
+        rtp: 99.00
     },
     {
         id: "crash",
@@ -35,8 +37,9 @@ export const GAMES: GameDefinition[] = [
         tagline: "Cash out before crash",
         category: "originals",
         icon: TrendingUp,
-        hex: "hsl(0, 85%, 55%)",    // Red
+        hex: "hsl(0, 85%, 55%)",
         status: "coming_soon",
+        rtp: 99.00
     },
     {
         id: "plinko",
@@ -44,8 +47,9 @@ export const GAMES: GameDefinition[] = [
         tagline: "Drop and win",
         category: "originals",
         icon: CircleDot,
-        hex: "hsl(200, 70%, 50%)",  // Blue
+        hex: "hsl(200, 70%, 50%)",
         status: "coming_soon",
+        rtp: 99.00
     },
     {
         id: "mines",
@@ -53,8 +57,9 @@ export const GAMES: GameDefinition[] = [
         tagline: "Avoid the bombs",
         category: "originals",
         icon: Bomb,
-        hex: "hsl(30, 80%, 50%)",   // Orange
+        hex: "hsl(30, 80%, 50%)",
         status: "coming_soon",
+        rtp: 99.00
     },
 
     // Table
@@ -64,8 +69,9 @@ export const GAMES: GameDefinition[] = [
         tagline: "Spin to win",
         category: "table",
         icon: Disc,
-        hex: "hsl(145, 70%, 45%)",  // Green
+        hex: "hsl(145, 70%, 45%)",
         status: "coming_soon",
+        rtp: 97.30
     },
     {
         id: "blackjack",
@@ -73,8 +79,9 @@ export const GAMES: GameDefinition[] = [
         tagline: "Beat the dealer",
         category: "table",
         icon: Spade,
-        hex: "hsl(0, 0%, 20%)",     // Dark gray
+        hex: "hsl(0, 0%, 20%)",
         status: "coming_soon",
+        rtp: 99.50
     },
     {
         id: "slots",
@@ -82,8 +89,9 @@ export const GAMES: GameDefinition[] = [
         tagline: "Spin the reels",
         category: "slots",
         icon: Ticket,
-        hex: "hsl(50, 90%, 55%)",   // Gold
+        hex: "hsl(50, 90%, 55%)",
         status: "coming_soon",
+        rtp: 96.00
     },
 ];
 
