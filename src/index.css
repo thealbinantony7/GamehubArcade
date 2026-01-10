@@ -1,9 +1,9 @@
 /**
- * CASINO DESIGN SYSTEM — Stake/Rainbet Style
- * Glossy, dense, functional
+ * PARADOX DESIGN SYSTEM
+ * Casino-grade visual identity
  */
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -11,34 +11,6 @@
 
 @layer base {
   :root {
-    /* Obsidian Palette (Base) */
-    --bg-base: 220 20% 8%;
-    /* #0f1218 */
-    --bg-obsidian: 0 0% 5%;
-    /* #0d0d0d - Deepest Base */
-    --bg-surface: 220 18% 11%;
-    /* #171b21 - Standard Surface */
-    --bg-highlight: 220 16% 14%;
-    /* #1e232b - Hover/Card */
-
-    /* Primary (Casino Red) */
-    --primary: 0 85% 55%;
-    --primary-hover: 0 90% 60%;
-
-    /* Glass Utilities */
-    --glass-border: 0 0% 100% / 0.08;
-    --glass-surface: 220 20% 12% / 0.6;
-
-    /* Accents */
-    --win-green: 145 70% 45%;
-    --loss-gray: 0 0% 40%;
-
-    /* Text */
-    --text: 0 0% 95%;
-    --text-muted: 0 0% 60%;
-    --text-dim: 0 0% 40%;
-
-    /* Global Radius */
     --radius: 12px;
 
     /* Z-Index Scale */
@@ -50,26 +22,22 @@
     --z-toast: 80;
   }
 
-  .theater-open {
-    overflow: hidden;
-  }
-
-  .dark {
-    color-scheme: dark;
-  }
-
   * {
-    border-color: hsl(var(--glass-border));
+    border-color: hsl(220 20% 18% / 0.5);
   }
 
   html {
-    font-family: 'Inter', system-ui, sans-serif;
-    background: hsl(var(--bg-obsidian));
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: hsl(220 20% 8%);
+    letter-spacing: -0.02em;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
   body {
-    background: hsl(var(--bg-obsidian));
-    color: hsl(var(--text));
+    background: hsl(220 20% 8%);
+    color: hsl(0 0% 100%);
+    letter-spacing: -0.02em;
   }
 }
 
@@ -77,15 +45,15 @@
 
   /* Liquid Glass Primitives */
   .glass-panel {
-    @apply bg-black/40 backdrop-filter backdrop-blur-xl border border-white/5 shadow-2xl;
+    @apply bg-brand-obsidian-glass/80 backdrop-blur-glass border border-white/5;
   }
 
   .glass-card {
-    @apply bg-[#14161b] border border-white/5 transition-all duration-300;
+    @apply bg-brand-obsidian-glass border border-white/5 transition-all duration-300;
   }
 
   .glass-card:hover {
-    @apply border-white/10 shadow-[0_0_20px_rgba(0, 0, 0, 0.5)] translate-y-[-2px];
+    @apply border-white/10 shadow-[0_0_20px_rgba(0, 0, 0, 0.5)] -translate-y-0.5;
   }
 
   .text-glow {

@@ -35,7 +35,7 @@ function Sidebar() {
         <aside className="hidden lg:flex flex-col w-64 bg-[hsl(220,20%,8%)] border-r border-white/5 h-screen sticky top-0 z-[var(--z-sidebar)]">
             {/* Logo */}
             <Link to="/" className="flex items-center gap-3 px-6 py-6 transition-opacity hover:opacity-80">
-                <div className="h-9 w-9 rounded-xl bg-gradient-to-br from-[hsl(0,85%,55%)] to-[hsl(0,85%,45%)] flex items-center justify-center shadow-[0_0_20px_hsla(0,85%,55%,0.3)]">
+                <div className="h-9 w-9 rounded-xl bg-gradient-to-br from-brand-red-base to-brand-red-deep flex items-center justify-center shadow-red-glow">
                     <Diamond className="h-5 w-5 text-white fill-white" />
                 </div>
                 <span className="text-lg font-bold text-white tracking-tight">GameHub</span>
@@ -58,7 +58,7 @@ function Sidebar() {
                                         : "text-white/60 hover:text-white hover:bg-white/5"
                                 )}
                             >
-                                <Icon className={cn("h-4 w-4 transition-colors", isActive ? "text-[hsl(0,85%,60%)]" : "text-white/40 group-hover:text-white")} />
+                                <Icon className={cn("h-4 w-4 transition-colors", isActive ? "text-brand-red-base" : "text-white/40 group-hover:text-white")} />
                                 {item.label}
                             </Link>
                         );
@@ -87,7 +87,7 @@ function Sidebar() {
                                         : "text-white/50 hover:text-white hover:bg-white/5"
                                 )}
                             >
-                                <Icon className={cn("h-4 w-4 transition-colors", isActive ? "text-[hsl(0,85%,60%)]" : "text-white/30 group-hover:text-white")} />
+                                <Icon className={cn("h-4 w-4 transition-colors", isActive ? "text-brand-red-base" : "text-white/30 group-hover:text-white")} />
                                 {game.label}
                             </Link>
                         );

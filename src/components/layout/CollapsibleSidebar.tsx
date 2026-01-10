@@ -36,31 +36,36 @@ export default function CollapsibleSidebar({ isOpen, onClose }: CollapsibleSideb
     return (
         <>
             {/* Overlay - Only on mobile */}
-            {isOpen && (
-                <div
-                    className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 lg:hidden"
-                    onClick={onClose}
-                />
-            )}
+            <div
+                className={cn(
+                    "fixed inset-0 bg-black/60 backdrop-blur-sm z-40 transition-opacity duration-300 lg:hidden",
+                    isOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
+                )}
+                onClick={onClose}
+            />
 
             {/* Sidebar */}
             <aside
                 className={cn(
-                    "hidden lg:flex fixed lg:relative top-0 left-0 h-full w-[280px] bg-[hsl(220,20%,8%)] border-r border-white/5 z-50 transform transition-all duration-300 overflow-y-auto flex-col",
-                    isOpen ? "lg:translate-x-0" : "lg:-translate-x-full"
+                    "fixed lg:sticky top-0 left-0 h-screen w-[260px] bg-[hsl(220,20%,8%)] border-r border-white/5 z-50 transition-transform duration-300 flex flex-col",
+                    // Mobile: Slide in/out based on isOpen
+                    // Desktop: Always visible (reset transform), sticky positioning
+                    isOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
                 )}
             >
                 {/* Header */}
                 <div className="flex items-center justify-between px-6 py-6 border-b border-white/5 flex-shrink-0">
                     <Link to="/" className="flex items-center gap-3">
-                        <div className="h-9 w-9 rounded-xl bg-gradient-to-br from-[hsl(0,85%,55%)] to-[hsl(0,85%,45%)] flex items-center justify-center shadow-[0_0_20px_hsla(0,85%,55%,0.3)]">
+                        <div className="h-9 w-9 rounded-xl bg-gradient-to-br from-brand-red-base to-brand-red-deep flex items-center justify-center shadow-red-glow">
                             <Diamond className="h-5 w-5 text-white fill-white" />
                         </div>
                         <span className="text-lg font-bold text-white tracking-tight">GameHub</span>
                     </Link>
+
+                    {/* Mobile Close Button */}
                     <button
                         onClick={onClose}
-                        className="h-8 w-8 flex items-center justify-center text-white/40 hover:text-white transition-colors rounded-lg hover:bg-white/5"
+                        className="lg:hidden h-8 w-8 flex items-center justify-center text-white/40 hover:text-white transition-colors rounded-lg hover:bg-white/5"
                     >
                         <ChevronLeft className="h-5 w-5" />
                     </button>
@@ -83,7 +88,7 @@ export default function CollapsibleSidebar({ isOpen, onClose }: CollapsibleSideb
                                             : "text-white/60 hover:text-white hover:bg-white/5"
                                     )}
                                 >
-                                    <Icon className={cn("h-4 w-4 transition-colors", isActive ? "text-[hsl(0,85%,60%)]" : "text-white/40 group-hover:text-white")} />
+                                    <Icon className={cn("h-4 w-4 transition-colors", isActive ? "text-brand-red-base" : "text-white/40 group-hover:text-white")} />
                                     {item.label}
                                 </Link>
                             );
@@ -112,7 +117,7 @@ export default function CollapsibleSidebar({ isOpen, onClose }: CollapsibleSideb
                                             : "text-white/50 hover:text-white hover:bg-white/5"
                                     )}
                                 >
-                                    <Icon className={cn("h-4 w-4 transition-colors", isActive ? "text-[hsl(0,85%,60%)]" : "text-white/30 group-hover:text-white")} />
+                                    <Icon className={cn("h-4 w-4 transition-colors", isActive ? "text-brand-red-base" : "text-white/30 group-hover:text-white")} />
                                     {game.label}
                                 </Link>
                             );

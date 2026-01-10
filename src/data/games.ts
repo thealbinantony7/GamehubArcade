@@ -5,7 +5,7 @@
 
 import { LucideIcon, Dices, TrendingUp, CircleDot, Bomb, Disc, Spade, Ticket } from "lucide-react";
 
-export type GameCategory = "originals" | "table";
+export type GameCategory = "originals" | "table" | "slots";
 export type GameStatus = "live" | "coming_soon";
 
 export interface GameDefinition {
@@ -80,7 +80,7 @@ export const GAMES: GameDefinition[] = [
         id: "slots",
         name: "Slots",
         tagline: "Spin the reels",
-        category: "table",
+        category: "slots",
         icon: Ticket,
         hex: "hsl(50, 90%, 55%)",   // Gold
         status: "coming_soon",

@@ -94,7 +94,7 @@ export default function FeaturedCarousel({ games }: FeaturedCarouselProps) {
 
                             {/* Hover Overlay with Play Button */}
                             <div className="absolute inset-0 bg-black/60 opacity-0 group-hover/card:opacity-100 transition-opacity duration-200 flex items-center justify-center backdrop-blur-[2px]">
-                                <div className="flex items-center gap-2 px-5 py-3 bg-[hsl(0,85%,55%)] rounded-full shadow-lg transform translate-y-4 group-hover/card:translate-y-0 transition-transform duration-300">
+                                <div className="flex items-center gap-2 px-5 py-3 bg-brand-red-base rounded-full shadow-red-glow transform translate-y-4 group-hover/card:translate-y-0 transition-transform duration-300 active:scale-95">
                                     <Play className="h-5 w-5 text-white" fill="white" />
                                     <span className="text-sm font-bold text-white uppercase tracking-wide">Play Now</span>
                                 </div>

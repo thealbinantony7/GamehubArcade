@@ -23,11 +23,12 @@ interface GameCardProps {
     featured?: boolean;
 }
 
-export default function GameCard({ game, featured }: GameCardProps) {
+export default function GameCard({ game, featured, variant = 'landscape' }: GameCardProps & { variant?: 'landscape' | 'portrait' | 'square' }) {
     const navigate = useNavigate();
     const [isHovered, setIsHovered] = useState(false);
 
     const getThumbnail = (gameId: string) => {
+        // ... (existing logic)
         switch (gameId) {
             case 'crash': return <CrashThumbnail />;
             case 'dice': return <DiceThumbnail />;
@@ -43,6 +44,12 @@ export default function GameCard({ game, featured }: GameCardProps) {
     // Motion priority: featured cards respond faster
     const transitionSpeed = featured ? 0.15 : 0.3;
 
+    const aspectRatioClass = {
+        landscape: 'aspect-[16/10]',
+        portrait: 'aspect-[3/4]',
+        square: 'aspect-square'
+    }[variant];
+
     return (
         <motion.div
             layoutId={`game-card-${game.id}`}
@@ -57,15 +64,15 @@ export default function GameCard({ game, featured }: GameCardProps) {
         >
             {/* Card Container */}
             <div className={cn(
-                "relative overflow-hidden rounded-xl bg-[hsl(220,20%,10%)] border transition-all duration-300",
+                "relative overflow-hidden rounded-xl bg-brand-obsidian-glass border transition-all duration-300",
                 featured
-                    ? "border-[hsl(0,85%,55%)]/20 group-hover:border-[hsl(0,85%,55%)]/40 group-hover:shadow-[0_0_25px_rgba(239,68,68,0.3)]"
+                    ? "border-brand-red-base/20 group-hover:border-brand-red-base/40 group-hover:shadow-red-glow"
                     : "border-white/5 group-hover:border-white/10 group-hover:shadow-[0_0_20px_rgba(0,0,0,0.5)]",
                 "group-hover:-translate-y-1"
             )}>
 
                 {/* 1. Thumbnail Layer */}
-                <div className="aspect-[16/10] w-full relative overflow-hidden">
+                <div className={cn("w-full relative overflow-hidden", aspectRatioClass)}>
                     {/* The Visual */}
                     <div className="w-full h-full transition-transform duration-500 group-hover:scale-105">
                         {getThumbnail(game.id)}
@@ -82,7 +89,7 @@ export default function GameCard({ game, featured }: GameCardProps) {
                         <div className={cn(
                             "w-12 h-12 rounded-full flex items-center justify-center transform scale-75 transition-all duration-300 group-hover:scale-100",
                             featured
-                                ? "bg-[hsl(0,85%,55%)] shadow-[0_0_25px_rgba(239,68,68,0.5)]"
+                                ? "bg-brand-red-base shadow-red-glow"
                                 : "bg-white shadow-[0_0_20px_rgba(255,255,255,0.3)]"
                         )}>
                             <Play className={cn("w-5 h-5 ml-0.5", featured ? "text-white" : "text-black")} fill="currentColor" />

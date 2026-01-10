@@ -73,14 +73,14 @@ export default function GameTheater() {
             >
                 {/* Balance Display */}
                 <div className="flex items-center gap-2 px-4 py-2 bg-black/60 backdrop-blur-xl rounded-lg border border-white/10">
-                    <Wallet className="w-4 h-4 text-[hsl(42,90%,60%)]" />
-                    <span className="text-sm font-bold text-white tabular-nums">
+                    <Wallet className="w-4 h-4 text-brand-gold-accent" />
+                    <span className="text-sm font-bold text-white font-mono tabular-nums">
                         ${balance.toFixed(2)}
                     </span>
                 </div>
 
                 {/* Deposit CTA - Red Pressure */}
-                <button className="flex items-center gap-2 px-4 py-2 bg-[hsl(0,85%,55%)] hover:bg-[hsl(0,85%,50%)] rounded-lg shadow-[0_0_20px_rgba(239,68,68,0.4)] hover:shadow-[0_0_30px_rgba(239,68,68,0.6)] transition-all transform hover:scale-105">
+                <button className="flex items-center gap-2 px-4 py-2 bg-brand-red-base hover:bg-brand-red-deep rounded-lg shadow-red-glow hover:shadow-[0_0_30px_rgba(239,68,68,0.6)] transition-all transform hover:scale-105 active:scale-95">
                     <TrendingUp className="w-4 h-4 text-white" />
                     <span className="text-sm font-bold text-white uppercase tracking-wide">Deposit</span>
                 </button>

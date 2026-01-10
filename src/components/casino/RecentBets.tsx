@@ -71,7 +71,7 @@ export default function RecentBets() {
                                 <span className="font-medium text-white/90 hidden md:block">{bet.game}</span>
                             </div>
 
-                            <div className="text-white/80 font-mono">
+                            <div className="text-white/80 font-mono tabular-nums">
                                 ${bet.bet.toFixed(2)}
                             </div>
 
@@ -79,7 +79,7 @@ export default function RecentBets() {
                                 {bet.multiplier.toFixed(2)}x
                             </div>
 
-                            <div className={`text-right font-bold ${bet.win ? "text-[hsl(145,70%,45%)]" : "text-white/30"}`}>
+                            <div className={`text-right font-bold font-mono tabular-nums ${bet.win ? "text-[hsl(145,70%,45%)]" : "text-white/30"}`}>
                                 {bet.payout > 0 ? `+$${bet.payout.toFixed(2)}` : '0.00'}
                             </div>
                         </motion.div>

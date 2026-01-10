@@ -62,8 +62,8 @@ function TopBar({ onMenuClick, showMenuButton = true }: { onMenuClick?: () => vo
                 <div className="flex items-center gap-2 md:gap-3">
                     {/* Balance Pill */}
                     <div className="flex items-center gap-2 h-10 px-3 md:px-4 bg-white/5 border border-white/10 rounded-lg">
-                        <Wallet className="h-4 w-4 text-[hsl(0,85%,55%)]" />
-                        <span className="text-xs md:text-sm font-semibold text-white">
+                        <Wallet className="h-4 w-4 text-brand-red-base" />
+                        <span className="text-xs md:text-sm font-semibold text-white font-mono tabular-nums">
                             ${user ? '0.00' : demoBalance.toFixed(2)}
                         </span>
                     </div>
@@ -73,7 +73,7 @@ function TopBar({ onMenuClick, showMenuButton = true }: { onMenuClick?: () => vo
                             {/* Deposit / Register */}
                             <Link
                                 to="/auth?mode=signup"
-                                className="h-10 px-3 md:px-5 bg-[hsl(0,85%,55%)] hover:bg-[hsl(0,90%,60%)] text-white font-medium text-xs md:text-sm rounded-lg transition-colors inline-flex items-center justify-center"
+                                className="h-10 px-3 md:px-5 bg-brand-red-base hover:bg-brand-red-deep text-white font-medium text-xs md:text-sm rounded-lg transition-colors inline-flex items-center justify-center"
                             >
                                 Deposit
                             </Link>

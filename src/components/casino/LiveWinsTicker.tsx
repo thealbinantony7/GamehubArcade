@@ -68,7 +68,7 @@ function TickerItem({ win }: { win: WinEvent }) {
         <div className="inline-flex items-center gap-2 bg-white/5 px-3 py-1 rounded-full border border-white/5 text-xs whitespace-nowrap hover:bg-white/10 transition-colors cursor-default">
             <span className="text-white/40 font-medium">{win.user}</span>
             <span className="text-white/60">on {win.game}</span>
-            <span className={cn("font-bold text-[hsl(145,70%,45%)]")}>
+            <span className="font-bold text-brand-gold-accent font-mono tabular-nums">
                 ${win.amount.toFixed(2)}
             </span>
         </div>

@@ -43,13 +43,13 @@ function MobileBottomNav() {
                             )}
                         >
                             {item.highlight ? (
-                                <div className="absolute -top-6 flex items-center justify-center w-14 h-14 rounded-full bg-[hsl(0,85%,55%)] shadow-lg shadow-red-500/30">
+                                <div className="absolute -top-6 flex items-center justify-center w-14 h-14 rounded-full bg-brand-red-base shadow-red-glow active:scale-95 transition-transform">
                                     <Icon className="h-6 w-6 text-white" />
                                 </div>
                             ) : (
                                 <>
-                                    <Icon className={cn("h-5 w-5", active && "text-[hsl(0,85%,55%)]")} />
-                                    <span className="text-[10px] font-medium">{item.label}</span>
+                                    <Icon className={cn("h-5 w-5 transition-colors", active && "text-brand-red-base")} />
+                                    <span className="text-[10px] font-medium uppercase tracking-wider">{item.label}</span>
                                 </>
                             )}
                         </Link>
