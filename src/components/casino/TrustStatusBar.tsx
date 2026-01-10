@@ -59,6 +59,10 @@ function TrustStatusBar({ onVerifyClick }: TrustStatusBarProps) {
                         )} />
                         <span className="text-white/60 uppercase tracking-wider">LIVE</span>
                     </div>
+
+                    {/* Damage Residue Ticks */}
+                    <DamageResidueTicks />
+
                     <span className="text-white/40">•</span>
                     <span className="text-white/90 uppercase tracking-wide">FAIR • VERIFIED</span>
                 </div>
@@ -105,6 +109,24 @@ function TrustStatusBar({ onVerifyClick }: TrustStatusBarProps) {
                     VERIFY
                 </button>
             </div>
+        </div>
+    );
+}
+
+function DamageResidueTicks() {
+    const damageResidue = useWalletStore(state => state.damageResidue);
+    const tickCount = Math.floor(damageResidue / 100);
+
+    if (tickCount === 0) return null;
+
+    return (
+        <div className="flex items-center gap-0.5">
+            {Array.from({ length: Math.min(tickCount, 10) }).map((_, i) => (
+                <div
+                    key={i}
+                    className="w-[2px] h-3 bg-brand-red-base/60"
+                />
+            ))}
         </div>
     );
 }

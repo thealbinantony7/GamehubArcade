@@ -33,6 +33,21 @@ interface WalletState {
     dailyLossLimit: number | null;
     cooldownUntil: number | null;
     limitsSetDate: string | null; // Track when limits were last set
+
+    // Session Exhaustion (Phase 9)
+    sessionCount: number;
+    lastSessionEnd: number | null;
+    lastSessionLoss: number;
+    lastSessionDuration: number;
+
+
+    // Damage Memory (Phase 10/11)
+    damageResidue: number; // Total cumulative loss memory
+    residueAgeBuckets: {
+        recent: number;  // Decays faster
+        aged: number;    // Decays slower (10-20%)
+    };
+    residueLastUpdate: number; // Timestamp for aging calculation
 }
 
 interface WalletActions {
@@ -51,7 +66,12 @@ interface WalletActions {
     setDailyLossLimit: (limit: number | null) => void;
     setCooldown: (minutes: number) => void;
     clearCooldown: () => void;
-    getRemainingCooldown: () => number; // seconds
+    getRemainingCooldown: () => number;
+
+    // Session Exhaustion (Phase 9/11)
+    getFatigueScore: () => number;
+    endSession: () => Promise<void>; // Async for finality moment
+    getBetDelay: () => number; // Returns delay in ms based on fatigue
 }
 
 type WalletStore = WalletState & WalletActions;
@@ -81,6 +101,20 @@ export const useWalletStore = create<WalletStore>()(
             dailyLossLimit: null,
             cooldownUntil: null,
             limitsSetDate: null,
+
+            // Session Exhaustion
+            sessionCount: 0,
+            lastSessionEnd: null,
+            lastSessionLoss: 0,
+            lastSessionDuration: 0,
+
+            // Damage Memory
+            damageResidue: 0,
+            residueAgeBuckets: {
+                recent: 0,
+                aged: 0,
+            },
+            residueLastUpdate: Date.now(),
 
             // Actions
             placeBet: (game: string, amount: number) => {
@@ -289,6 +323,95 @@ export const useWalletStore = create<WalletStore>()(
                 const remaining = Math.max(0, state.cooldownUntil - Date.now());
                 return Math.ceil(remaining / 1000);
             },
+
+            // Session Exhaustion
+            getFatigueScore: () => {
+                const state = get();
+                const sessionDuration = state.getSessionDuration();
+                const sessionLoss = state.getSessionLoss();
+
+                // Fatigue increases with:
+                // - Session length (1 point per 10 minutes)
+                // - Loss magnitude (1 point per $100 lost)
+                // - Session count (0.5 points per session)
+                const durationFatigue = sessionDuration / 600; // 10 minutes
+                const lossFatigue = sessionLoss / 100;
+                const countFatigue = state.sessionCount * 0.5;
+
+                return durationFatigue + lossFatigue + countFatigue;
+            },
+
+            endSession: async () => {
+                const state = get();
+                const sessionLoss = state.getSessionLoss();
+                const sessionDuration = state.getSessionDuration();
+                const sessionPnL = state.getSessionPnL();
+                const now = Date.now();
+
+                // Session finality moment (Phase 11)
+                // Brief global UI dim (150-250ms)
+                if (typeof document !== 'undefined') {
+                    const dimDuration = 150 + Math.random() * 100;
+                    document.body.style.pointerEvents = 'none';
+                    document.body.style.opacity = '0.7';
+
+                    await new Promise(resolve => setTimeout(resolve, dimDuration));
+
+                    document.body.style.pointerEvents = '';
+                    document.body.style.opacity = '';
+                }
+
+                // Age recent residue into aged bucket (after 24 hours)
+                const timeSinceUpdate = now - state.residueLastUpdate;
+                const hoursElapsed = timeSinceUpdate / (1000 * 60 * 60);
+
+                let newRecent = state.residueAgeBuckets.recent;
+                let newAged = state.residueAgeBuckets.aged;
+
+                if (hoursElapsed >= 24) {
+                    // Move recent to aged
+                    newAged += newRecent;
+                    newRecent = 0;
+                }
+
+                // Update residue based on session outcome
+                if (sessionPnL < 0) {
+                    // Add new loss to recent bucket
+                    newRecent += Math.abs(sessionPnL);
+                } else if (sessionPnL > 0) {
+                    // Decay: recent decays faster (50%), aged decays slower (15%)
+                    const recentDecay = sessionPnL * 0.5;
+                    const agedDecay = sessionPnL * 0.15;
+
+                    newRecent = Math.max(0, newRecent - recentDecay);
+                    newAged = Math.max(0, newAged - agedDecay);
+                }
+
+                const newDamageResidue = newRecent + newAged;
+
+                set({
+                    sessionCount: state.sessionCount + 1,
+                    lastSessionEnd: now,
+                    lastSessionLoss: sessionLoss,
+                    lastSessionDuration: sessionDuration,
+                    damageResidue: newDamageResidue,
+                    residueAgeBuckets: {
+                        recent: newRecent,
+                        aged: newAged,
+                    },
+                    residueLastUpdate: now,
+                });
+            },
+
+            getBetDelay: () => {
+                const state = get();
+                const fatigue = state.getFatigueScore();
+
+                // Base delay: 0ms
+                // Add 50ms per fatigue point (max 500ms additional)
+                const fatigueDelay = Math.min(fatigue * 50, 500);
+                return Math.floor(fatigueDelay);
+            },
         }),
         {
             name: 'paradox-wallet',
@@ -304,6 +427,13 @@ export const useWalletStore = create<WalletStore>()(
                 dailyLossLimit: state.dailyLossLimit,
                 cooldownUntil: state.cooldownUntil,
                 limitsSetDate: state.limitsSetDate,
+                sessionCount: state.sessionCount,
+                lastSessionEnd: state.lastSessionEnd,
+                lastSessionLoss: state.lastSessionLoss,
+                lastSessionDuration: state.lastSessionDuration,
+                damageResidue: state.damageResidue,
+                residueAgeBuckets: state.residueAgeBuckets,
+                residueLastUpdate: state.residueLastUpdate,
             }),
         }
     )

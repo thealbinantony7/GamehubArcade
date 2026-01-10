@@ -37,6 +37,11 @@ function GameTrustHeader({ gameName, rtp, houseEdge, onVerifyClick }: GameTrustH
 
                 <div className="flex items-center gap-4 text-xs font-mono">
                     <div className="flex items-center gap-1.5">
+                        <span className="text-white/40 uppercase tracking-wide">AUTHORITY:</span>
+                        <span className="text-white font-bold tabular-nums">SIMULATED</span>
+                    </div>
+                    <span className="text-white/20">|</span>
+                    <div className="flex items-center gap-1.5">
                         <span className="text-white/40 uppercase tracking-wide">RTP:</span>
                         <span className="text-white font-bold tabular-nums">{rtp.toFixed(2)}%</span>
                     </div>

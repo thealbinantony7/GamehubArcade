@@ -15,6 +15,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { ThemeProvider } from "@/contexts/ThemeContext";
 import { AuthProvider } from "@/contexts/AuthContext";
+import { useState, useEffect } from "react";
 
 // Pages
 import Home from "./pages/Home";
@@ -31,43 +32,57 @@ import AdminDashboard from "./pages/admin/AdminDashboard";
 
 const queryClient = new QueryClient();
 
-const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <ThemeProvider>
-      <AuthProvider>
-        <TooltipProvider>
-          <Toaster />
-          <Sonner />
-          <BrowserRouter>
-            <Routes>
-              {/* Main Routes */}
-              <Route path="/" element={<Home />} />
-              <Route path="/casino/:gameId" element={<Game />} />
-              <Route path="/leaderboard" element={<Leaderboard />} />
-              <Route path="/promotions" element={<Promotions />} />
+const App = () => {
+  // Entry inertia (Phase 10)
+  const [isInert, setIsInert] = useState(true);
 
-              {/* Auth */}
-              <Route path="/auth" element={<Auth />} />
-              <Route path="/profile" element={<ProfilePage />} />
+  useEffect(() => {
+    // Disable betting for 1-2s on mount
+    const delay = 1000 + Math.random() * 1000;
+    const timer = setTimeout(() => setIsInert(false), delay);
+    return () => clearTimeout(timer);
+  }, []);
 
-              {/* Admin */}
-              <Route path="/admin" element={<AdminLayout />}>
-                <Route index element={<AdminDashboard />} />
-              </Route>
+  return (
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider>
+        <AuthProvider>
+          <TooltipProvider>
+            <Toaster />
+            <Sonner />
+            <div style={{ pointerEvents: isInert ? 'none' : 'auto' }}>
+              <BrowserRouter>
+                <Routes>
+                  {/* Main Routes */}
+                  <Route path="/" element={<Home />} />
+                  <Route path="/casino/:gameId" element={<Game />} />
+                  <Route path="/leaderboard" element={<Leaderboard />} />
+                  <Route path="/promotions" element={<Promotions />} />
 
-              {/* Legacy route redirects */}
-              <Route path="/play/:gameId" element={<Navigate to="/casino/:gameId" replace />} />
-              <Route path="/arcade" element={<Navigate to="/" replace />} />
-              <Route path="/arcade/*" element={<Navigate to="/" replace />} />
+                  {/* Auth */}
+                  <Route path="/auth" element={<Auth />} />
+                  <Route path="/profile" element={<ProfilePage />} />
 
-              {/* 404 */}
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </BrowserRouter>
-        </TooltipProvider>
-      </AuthProvider>
-    </ThemeProvider>
-  </QueryClientProvider>
-);
+                  {/* Admin */}
+                  <Route path="/admin" element={<AdminLayout />}>
+                    <Route index element={<AdminDashboard />} />
+                  </Route>
+
+                  {/* Legacy route redirects */}
+                  <Route path="/play/:gameId" element={<Navigate to="/casino/:gameId" replace />} />
+                  <Route path="/arcade" element={<Navigate to="/" replace />} />
+                  <Route path="/arcade/*" element={<Navigate to="/" replace />} />
+
+                  {/* 404 */}
+                  <Route path="*" element={<NotFound />} />
+                </Routes>
+              </BrowserRouter>
+            </div>
+          </TooltipProvider>
+        </AuthProvider>
+      </ThemeProvider>
+    </QueryClientProvider>
+  );
+};
 
 export default App;

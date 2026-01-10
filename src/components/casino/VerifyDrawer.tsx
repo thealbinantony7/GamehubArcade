@@ -109,6 +109,7 @@ function VerifyDrawer({ isOpen, onClose, data }: VerifyDrawerProps) {
                                 </a>
                             </section>
 
+                            <SessionHistorySection />
                             <RiskLimitsSection />
                         </div>
                     </motion.div>
@@ -197,6 +198,81 @@ function RiskLimitsSection() {
                 <p className="text-[10px] text-white/30 font-mono">
                     Limits can only be lowered on the same day. (SIMULATED)
                 </p>
+            </div>
+        </section>
+    );
+}
+
+function SessionHistorySection() {
+    const sessionStartTime = useWalletStore(state => state.sessionStartTime);
+    const lastSessionEnd = useWalletStore(state => state.lastSessionEnd);
+    const lastSessionLoss = useWalletStore(state => state.lastSessionLoss);
+    const lastSessionDuration = useWalletStore(state => state.lastSessionDuration);
+    const sessionCount = useWalletStore(state => state.sessionCount);
+    const getSessionPnL = useWalletStore(state => state.getSessionPnL());
+
+    const formatDuration = (seconds: number) => {
+        const mins = Math.floor(seconds / 60);
+        const secs = seconds % 60;
+        return `${mins}m ${secs}s`;
+    };
+
+    const formatTimestamp = (timestamp: number) => {
+        return new Date(timestamp).toLocaleTimeString('en-US', {
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: false
+        });
+    };
+
+    return (
+        <section className="border-t border-white/10 pt-6">
+            <h3 className="text-sm font-bold text-white uppercase tracking-wide mb-3">Session History</h3>
+
+            <div className="space-y-3">
+                {/* Current Session */}
+                <div className="bg-black/20 border border-white/5 rounded p-3">
+                    <div className="text-xs text-white/40 uppercase tracking-wide mb-2">Current Session</div>
+                    <div className="grid grid-cols-2 gap-2 text-xs font-mono">
+                        <div>
+                            <span className="text-white/40">Start:</span>
+                            <span className="text-white ml-2 tabular-nums">{formatTimestamp(sessionStartTime)}</span>
+                        </div>
+                        <div>
+                            <span className="text-white/40">Net PnL:</span>
+                            <span className={`ml-2 tabular-nums ${getSessionPnL > 0 ? 'text-green-500' : getSessionPnL < 0 ? 'text-red-400' : 'text-white'
+                                }`}>
+                                {getSessionPnL > 0 ? '+' : ''}{getSessionPnL.toFixed(2)}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Last Session */}
+                {lastSessionEnd && (
+                    <div className="bg-black/20 border border-white/5 rounded p-3">
+                        <div className="text-xs text-white/40 uppercase tracking-wide mb-2">Last Session</div>
+                        <div className="grid grid-cols-2 gap-2 text-xs font-mono">
+                            <div>
+                                <span className="text-white/40">Ended:</span>
+                                <span className="text-white ml-2 tabular-nums">{formatTimestamp(lastSessionEnd)}</span>
+                            </div>
+                            <div>
+                                <span className="text-white/40">Duration:</span>
+                                <span className="text-white ml-2 tabular-nums">{formatDuration(lastSessionDuration)}</span>
+                            </div>
+                            <div className="col-span-2">
+                                <span className="text-white/40">Loss:</span>
+                                <span className="text-red-400 ml-2 tabular-nums">-${lastSessionLoss.toFixed(2)}</span>
+                            </div>
+                        </div>
+                    </div>
+                )}
+
+                {/* Session Count */}
+                <div className="text-xs text-white/40 font-mono">
+                    Total Sessions: <span className="text-white tabular-nums">{sessionCount}</span>
+                </div>
             </div>
         </section>
     );
