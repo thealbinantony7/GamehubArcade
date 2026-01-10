@@ -49,7 +49,7 @@ export default function GameRow({ title, icon: Icon, games, type = 'portrait', c
                            if we want strictly different inner layouts.
                            For now, we just control grid columns.
                        */}
-                        <GameCard game={game} featured={i < 2} />
+                        <GameCard game={game} featured={i < 2} variant={type} />
                     </div>
                 ))}
             </div>

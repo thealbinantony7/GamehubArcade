@@ -31,7 +31,7 @@ function TopBar({ onMenuClick, showMenuButton = true }: { onMenuClick?: () => vo
     const balance = useWalletStore(state => state.balance);
 
     return (
-        <div className="sticky top-0 z-40 bg-[hsl(220,20%,8%)]/80 backdrop-blur-xl border-b border-white/5 supports-[backdrop-filter]:bg-[hsl(220,20%,8%)]/60 relative">
+        <div className="sticky top-0 z-50 bg-[hsl(220,20%,8%)]/80 backdrop-blur-xl border-b border-white/5 supports-[backdrop-filter]:bg-[hsl(220,20%,8%)]/60 relative">
 
             {/* Absolute Hamburger Button - Flush Left */}
             {onMenuClick && showMenuButton && (
@@ -53,6 +53,7 @@ function TopBar({ onMenuClick, showMenuButton = true }: { onMenuClick?: () => vo
                             <input
                                 type="text"
                                 placeholder="Search games..."
+                                aria-label="Search games"
                                 className="w-full h-10 pl-10 pr-4 bg-white/5 border border-white/10 rounded-lg text-sm text-white placeholder:text-white/40 focus:outline-none focus:border-white/20 transition-colors"
                             />
                         </div>

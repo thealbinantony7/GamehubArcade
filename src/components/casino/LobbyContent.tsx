@@ -38,7 +38,7 @@ export default function LobbyContent() {
     return (
         <div className="flex flex-col min-h-screen">
             {/* 1. Ticker (Edge-to-Edge) */}
-            <div className="border-b border-white/5 bg-black/20 backdrop-blur-md sticky top-0 md:relative z-30">
+            <div className="border-b border-white/5 bg-black/20 backdrop-blur-md relative z-30">
                 <LiveWinsTicker />
             </div>
 
@@ -51,7 +51,7 @@ export default function LobbyContent() {
                 </div>
 
                 {/* 3. Filters Sticky Bar */}
-                <div className="sticky top-[40px] md:top-0 z-40 bg-[hsl(220,24%,7%)]/95 backdrop-blur-xl py-2 border-b border-white/5 md:border-none">
+                <div className="sticky top-16 z-40 bg-[hsl(220,24%,7%)]/95 backdrop-blur-xl py-2 border-b border-white/5 md:border-none">
                     <div className="flex items-center gap-2 overflow-x-auto scrollbar-hide">
                         {FILTERS.map((f) => {
                             const Icon = f.icon;
@@ -81,7 +81,7 @@ export default function LobbyContent() {
                     {/* Originals Row (Landscape) */}
                     {(filter === 'all' || filter === 'originals') && (
                         <GameRow
-                            title="Paradox Originals"
+                            title="CORE MODULES"
                             icon={Sparkles}
                             games={displayOriginals}
                             type="landscape"
@@ -91,7 +91,7 @@ export default function LobbyContent() {
                     {/* High Rollers (Portrait) */}
                     {(filter === 'all' || filter === 'table') && (
                         <GameRow
-                            title="High Rollers"
+                            title="HIGH VALUE"
                             icon={Trophy}
                             games={displayPopular.slice(0, 4)}
                             type="portrait"
@@ -101,7 +101,7 @@ export default function LobbyContent() {
                     {/* New Releases (Portrait) */}
                     {(filter === 'all' || filter === 'slots') && (
                         <GameRow
-                            title="New Releases"
+                            title="LATEST LOG"
                             icon={Zap}
                             games={newReleases}
                             type="portrait"
@@ -111,7 +111,7 @@ export default function LobbyContent() {
                     {/* Recommended / All Games (Portrait) */}
                     {(filter === 'all') && (
                         <GameRow
-                            title="Recommended For You"
+                            title="SYSTEM REGISTRY"
                             icon={TrendingUp}
                             games={allGames}
                             type="portrait"
