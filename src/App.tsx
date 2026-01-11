@@ -25,6 +25,7 @@ import ProfilePage from "./pages/ProfilePage";
 import Leaderboard from "./pages/Leaderboard";
 import Promotions from "./pages/Promotions";
 import Compliance from "./pages/Compliance";
+import PlinkoGame from "./pages/PlinkoGame";
 import NotFound from "./pages/NotFound";
 
 // Admin
@@ -66,6 +67,7 @@ const App = () => {
                   <Route path="/leaderboard" element={<Leaderboard />} />
                   <Route path="/promotions" element={<Promotions />} />
                   <Route path="/compliance" element={<Compliance />} />
+                  <Route path="/plinko" element={<PlinkoGame />} />
 
                   {/* Auth */}
                   <Route path="/auth" element={<Auth />} />
