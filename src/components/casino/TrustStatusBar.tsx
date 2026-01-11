@@ -26,9 +26,11 @@ function TrustStatusBar({ onVerifyClick }: TrustStatusBarProps) {
     const currentHash = "0xABCD1234";
     const isLive = true;
 
-    // Update cooldown countdown
+    // Update cooldown countdown (ONLY when actively blocked by cooldown)
     useEffect(() => {
-        if (!isBettingBlocked || blockReason !== 'COOLDOWN ACTIVE') return;
+        // Skip entirely if not blocked or not a cooldown block
+        if (!isBettingBlocked) return;
+        if (blockReason !== 'COOLDOWN ACTIVE') return;
 
         const interval = setInterval(() => {
             const remaining = getRemainingCooldown();
