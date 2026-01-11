@@ -68,6 +68,7 @@ const App = () => {
                   <Route path="/promotions" element={<Promotions />} />
                   <Route path="/compliance" element={<Compliance />} />
                   <Route path="/plinko" element={<PlinkoGame />} />
+                  <Route path="/casino/plinko" element={<PlinkoGame />} />
 
                   {/* Auth */}
                   <Route path="/auth" element={<Auth />} />
