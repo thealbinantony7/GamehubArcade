@@ -87,4 +87,4 @@ const TickerItem = memo(function TickerItem({ win }: { win: WinEvent }) {
             </span>
         </div>
     )
-}
+});

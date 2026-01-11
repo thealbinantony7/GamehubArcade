@@ -4,7 +4,7 @@
  * Replaces the basic div blocks in GameGrid.
  */
 
-import { useState } from 'react';
+import { useState, memo } from 'react';
 import { Play } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
@@ -22,10 +22,6 @@ interface GameCardProps {
     game: GameDefinition;
     featured?: boolean;
 }
-
-import { useState, memo } from 'react';
-
-// ... imports
 
 export default memo(function GameCard({ game, featured, variant = 'landscape' }: GameCardProps & { variant?: 'landscape' | 'portrait' | 'square' }) {
     const navigate = useNavigate();
