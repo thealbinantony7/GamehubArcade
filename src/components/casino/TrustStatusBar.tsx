@@ -75,32 +75,41 @@ function TrustStatusBar({ onVerifyClick }: TrustStatusBarProps) {
                 {isBettingBlocked ? (
                     <>
                         <span className="text-brand-red-base font-bold uppercase tracking-wider">
-                            {blockReason === 'COOLDOWN ACTIVE' ? `COOLDOWN • ${formatCooldown(cooldownSeconds)}` : blockReason}
+                            {blockReason === 'COOLDOWN ACTIVE' ? `COOLDOWN • ${formatCooldown(cooldownSeconds)}` : blockReason === 'LOSS THRESHOLD REACHED' ? `LOSS THRESHOLD • -${sessionLoss.toFixed(2)} / -${sessionLossLimit?.toFixed(2)}` : blockReason}
                         </span>
                     </>
                 ) : (
-                    <>
+                    <div className="flex items-center gap-3">
+                        {/* Session Loss */}
                         {sessionLossLimit !== null && (
-                            <>
-                                <div className="flex items-center gap-1.5">
-                                    <span className="text-slate-400 uppercase">SESSION LOSS:</span>
-                                    <span className="text-white font-bold tabular-nums">
-                                        -${sessionLoss.toFixed(2)} / ${sessionLossLimit.toFixed(2)}
-                                    </span>
-                                </div>
-                                <span className="text-slate-400">•</span>
-                            </>
+                            <div className="flex items-center gap-2 text-xs">
+                                <span className="text-slate-400 uppercase tracking-wider">
+                                    SESSION LOSS:
+                                </span>
+                                <span className="text-white/60">|</span>
+                                <span className={cn(
+                                    "font-mono tabular-nums font-bold",
+                                    sessionLoss >= sessionLossLimit ? "text-brand-red-base" : "text-white"
+                                )}>
+                                    -${sessionLoss.toFixed(2)} / ${sessionLossLimit.toFixed(2)}
+                                </span>
+                            </div>
                         )}
-                        <div className="flex items-center gap-1.5">
-                            <span className="text-slate-400 uppercase">RTP:</span>
-                            <span className="text-white font-bold tabular-nums">{rtp.toFixed(2)}%</span>
+
+                        {/* RTP */}
+                        <div className="flex items-center gap-2 text-xs">
+                            <span className="text-slate-400 uppercase tracking-wider">RTP:</span>
+                            <span className="text-white/60">|</span>
+                            <span className="font-mono text-white">98.5%</span>
                         </div>
-                        <span className="text-slate-400">•</span>
-                        <div className="flex items-center gap-1.5">
-                            <span className="text-slate-400 uppercase">HASH:</span>
-                            <span className="text-white/60 tabular-nums">{currentHash}</span>
+
+                        {/* Hash */}
+                        <div className="flex items-center gap-2 text-xs">
+                            <span className="text-slate-400 uppercase tracking-wider">HASH:</span>
+                            <span className="text-white/60">|</span>
+                            <span className="font-mono text-white/80">{currentHash}</span>
                         </div>
-                    </>
+                    </div>
                 )}
             </div>
 

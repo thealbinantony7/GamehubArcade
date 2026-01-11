@@ -42,6 +42,9 @@ interface WalletState {
     lastSessionDuration: number;
     currentSessionId: string; // Phase 14: Current session identifier
 
+    // Reality Check (Phase 15A)
+    lastRealityCheckTime: number | null; // Last time reality check was shown
+    realityCheckInterval: number; // Interval in ms (default 30 minutes)
 
     // Damage Memory (Phase 10/11)
     damageResidue: number; // Total cumulative loss memory
@@ -69,6 +72,11 @@ interface WalletActions {
     setCooldown: (minutes: number) => void;
     clearCooldown: () => void;
     getRemainingCooldown: () => number;
+
+    // Reality Check (Phase 15A)
+    shouldShowRealityCheck: () => boolean;
+    markRealityCheckShown: () => void;
+    getTotalWagered: () => number;
 
     // Session Exhaustion (Phase 9/11)
     getFatigueScore: () => number;
@@ -110,6 +118,10 @@ export const useWalletStore = create<WalletStore>()(
             lastSessionLoss: 0,
             lastSessionDuration: 0,
             currentSessionId: `session_${Date.now()}`, // Phase 14: Initial session ID
+
+            // Reality Check (Phase 15A)
+            lastRealityCheckTime: null,
+            realityCheckInterval: 30 * 60 * 1000, // 30 minutes in ms
 
             // Damage Memory
             damageResidue: 0,
@@ -330,6 +342,29 @@ export const useWalletStore = create<WalletStore>()(
                 return Math.ceil(remaining / 1000);
             },
 
+            // Reality Check (Phase 15A)
+            shouldShowRealityCheck: () => {
+                const state = get();
+                const now = Date.now();
+
+                // Never shown before
+                if (state.lastRealityCheckTime === null) {
+                    return now - state.sessionStartTime >= state.realityCheckInterval;
+                }
+
+                // Check if interval has passed since last check
+                return now - state.lastRealityCheckTime >= state.realityCheckInterval;
+            },
+
+            markRealityCheckShown: () => {
+                set({ lastRealityCheckTime: Date.now() });
+            },
+
+            getTotalWagered: () => {
+                const state = get();
+                return state.betHistory.reduce((total, bet) => total + bet.betAmount, 0);
+            },
+
             // Session Exhaustion
             getFatigueScore: () => {
                 const state = get();
@@ -438,6 +473,8 @@ export const useWalletStore = create<WalletStore>()(
                 lastSessionLoss: state.lastSessionLoss,
                 lastSessionDuration: state.lastSessionDuration,
                 currentSessionId: state.currentSessionId, // Phase 14: Persist session ID
+                lastRealityCheckTime: state.lastRealityCheckTime, // Phase 15A: Persist reality check
+                realityCheckInterval: state.realityCheckInterval,
                 damageResidue: state.damageResidue,
                 residueAgeBuckets: state.residueAgeBuckets,
                 residueLastUpdate: state.residueLastUpdate,

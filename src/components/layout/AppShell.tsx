@@ -1,6 +1,7 @@
 /**
  * APP SHELL — Persistent Casino Layout
  * Never unmounts. Contains all navigation + content areas.
+ * Phase 15A: Reality check modal integration
  */
 
 import { ReactNode, useState, useEffect, useCallback } from 'react';
@@ -10,6 +11,8 @@ import CollapsibleSidebar from './CollapsibleSidebar';
 import MobileBottomNav from './MobileBottomNav';
 import TrustStatusBar from '../casino/TrustStatusBar';
 import VerifyDrawer from '../casino/VerifyDrawer';
+import RealityCheckModal from '../casino/RealityCheckModal';
+import { useWalletStore } from '@/store/wallet.store';
 
 interface AppShellProps {
     children: ReactNode;
@@ -19,11 +22,38 @@ export default function AppShell({ children }: AppShellProps) {
     const location = useLocation();
     const [sidebarOpen, setSidebarOpen] = useState(false); // Mobile only state
     const [verifyDrawerOpen, setVerifyDrawerOpen] = useState(false);
+    const [realityCheckOpen, setRealityCheckOpen] = useState(false);
+
+    const shouldShowRealityCheck = useWalletStore(state => state.shouldShowRealityCheck);
+    const markRealityCheckShown = useWalletStore(state => state.markRealityCheckShown);
+    const setCooldown = useWalletStore(state => state.setCooldown);
 
     const handleSidebarClose = useCallback(() => setSidebarOpen(false), []);
     const handleSidebarOpen = useCallback(() => setSidebarOpen(true), []);
     const handleVerifyOpen = useCallback(() => setVerifyDrawerOpen(true), []);
     const handleVerifyClose = useCallback(() => setVerifyDrawerOpen(false), []);
+
+    // Reality check interval (Phase 15A)
+    useEffect(() => {
+        const checkInterval = setInterval(() => {
+            if (shouldShowRealityCheck()) {
+                setRealityCheckOpen(true);
+            }
+        }, 60000); // Check every minute
+
+        return () => clearInterval(checkInterval);
+    }, [shouldShowRealityCheck]);
+
+    const handleRealityCheckContinue = useCallback(() => {
+        markRealityCheckShown();
+        setRealityCheckOpen(false);
+    }, [markRealityCheckShown]);
+
+    const handleRealityCheckBreak = useCallback(() => {
+        markRealityCheckShown();
+        setRealityCheckOpen(false);
+        setCooldown(15); // 15-minute break
+    }, [markRealityCheckShown, setCooldown]);
 
     // Check if we're in a game route for potential specific styling (optional)
     const isGameRoute = location.pathname.startsWith('/casino/');
@@ -60,6 +90,13 @@ export default function AppShell({ children }: AppShellProps) {
 
             {/* Verify Drawer */}
             <VerifyDrawer isOpen={verifyDrawerOpen} onClose={handleVerifyClose} />
+
+            {/* Reality Check Modal (Phase 15A) */}
+            <RealityCheckModal
+                isOpen={realityCheckOpen}
+                onContinue={handleRealityCheckContinue}
+                onTakeBreak={handleRealityCheckBreak}
+            />
         </div>
     );
 }
