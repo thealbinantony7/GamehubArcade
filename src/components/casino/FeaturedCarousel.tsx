@@ -43,10 +43,10 @@ export default function FeaturedCarousel({ games }: FeaturedCarouselProps) {
                         <div
                             key={game.id}
                             onClick={() => navigate(`/casino/${game.id}`)}
-                            className="group/card snap-start relative flex-shrink-0 w-[320px] h-[180px] bg-gradient-to-br from-[hsl(220,16%,16%)] to-[hsl(220,16%,12%)] rounded-2xl overflow-hidden cursor-pointer shadow-lg hover:shadow-2xl transition-all duration-300 border border-white/5 hover:border-white/10"
+                            className="group/card snap-start relative flex-shrink-0 w-[320px] h-[180px] bg-brand-obsidian-glass rounded-2xl overflow-hidden cursor-pointer border border-white/5 hover:border-white/20 transition-colors will-change-transform"
                         >
                             {/* Graphic Background (CSS Art) */}
-                            <div className="absolute inset-0 opacity-80 group-hover/card:scale-105 transition-transform duration-500">
+                            <div className="absolute inset-0 opacity-80 group-hover/card:opacity-100 transition-opacity duration-300">
                                 {getThumbnail(game.id)}
                             </div>
 
@@ -70,7 +70,7 @@ export default function FeaturedCarousel({ games }: FeaturedCarouselProps) {
 
                             {/* Hover Overlay with Play Button */}
                             <div className="absolute inset-0 bg-black/60 opacity-0 group-hover/card:opacity-100 transition-opacity duration-200 flex items-center justify-center backdrop-blur-[2px]">
-                                <div className="flex items-center gap-2 px-5 py-3 bg-brand-red-base rounded-full shadow-red-glow transform translate-y-4 group-hover/card:translate-y-0 transition-transform duration-300 active:scale-95">
+                                <div className="flex items-center gap-2 px-5 py-3 bg-brand-red-base rounded-full shadow-red-glow">
                                     <Play className="h-5 w-5 text-white" fill="white" />
                                     <span className="text-sm font-bold text-white uppercase tracking-wide">Play Now</span>
                                 </div>

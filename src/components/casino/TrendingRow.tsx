@@ -19,7 +19,7 @@ export default function TrendingRow() {
     return (
         <div className="w-full overflow-hidden bg-[hsl(220,20%,8%)] border-y border-white/5">
             <div className="max-w-[1600px] px-4 md:px-6 py-2 flex items-center gap-6 overflow-x-auto scrollbar-hide mask-edges" tabIndex={0} role="region" aria-label="Trending games">
-                <div className="flex-shrink-0 flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-white/40">
+                <div className="flex-shrink-0 flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-white/70">
                     <Flame className="h-3 w-3 text-brand-red-base" />
                     <span>Trending</span>
                 </div>

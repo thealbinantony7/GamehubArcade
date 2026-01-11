@@ -53,17 +53,16 @@ export default memo(function GameCard({ game, featured, variant = 'landscape' }:
             <div className="group relative w-full cursor-pointer isolate">
                 {/* Card Container */}
                 <div className={cn(
-                    "relative overflow-hidden rounded-xl bg-brand-obsidian-glass border transition-all duration-300",
+                    "relative overflow-hidden rounded-xl bg-brand-obsidian-glass border transition-colors duration-200 will-change-transform",
                     featured
-                        ? "border-brand-red-base/20 group-hover:border-brand-red-base/40 group-hover:shadow-red-glow"
-                        : "border-white/5 group-hover:border-white/10 group-hover:shadow-[0_0_20px_rgba(0,0,0,0.5)]",
-                    "group-hover:-translate-y-1"
+                        ? "border-brand-red-base/20 hover:border-brand-red-base/40"
+                        : "border-white/5 hover:border-white/20"
                 )}>
 
                     {/* 1. Thumbnail Layer */}
                     <div className={cn("w-full relative overflow-hidden", aspectRatioClass)}>
                         {/* The Visual */}
-                        <div className="w-full h-full transition-transform duration-500 group-hover:scale-105">
+                        <div className="w-full h-full">
                             {getThumbnail(game.id)}
                         </div>
 
@@ -71,9 +70,9 @@ export default memo(function GameCard({ game, featured, variant = 'landscape' }:
                         <div className="absolute inset-0 bg-gradient-to-t from-[hsl(220,20%,8%)] via-transparent to-transparent opacity-60" />
 
                         {/* Hover Overlay (Darkens for button pop) */}
-                        <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center backdrop-blur-[2px]">
+                        <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center backdrop-blur-[2px]">
                             <div className={cn(
-                                "w-12 h-12 rounded-full flex items-center justify-center transform scale-75 transition-all duration-300 group-hover:scale-100",
+                                "w-12 h-12 rounded-full flex items-center justify-center",
                                 featured
                                     ? "bg-brand-red-base shadow-red-glow"
                                     : "bg-white shadow-[0_0_20px_rgba(255,255,255,0.3)]"

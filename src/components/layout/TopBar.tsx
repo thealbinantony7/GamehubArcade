@@ -49,12 +49,12 @@ function TopBar({ onMenuClick, showMenuButton = true }: { onMenuClick?: () => vo
                 <div className="flex items-center gap-3 flex-1">
                     <div className="flex-1 max-w-md">
                         <div className="relative">
-                            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-white/40" />
+                            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-white/70" />
                             <input
                                 type="text"
                                 placeholder="Search games..."
                                 aria-label="Search games"
-                                className="w-full h-10 pl-10 pr-4 bg-white/5 border border-white/10 rounded-lg text-sm text-white placeholder:text-white/40 focus:outline-none focus:border-white/20 transition-colors"
+                                className="w-full h-10 pl-10 pr-4 bg-white/5 border border-white/10 rounded-lg text-sm text-white placeholder:text-white/70 focus:outline-none focus:border-white/20 transition-colors"
                             />
                         </div>
                     </div>

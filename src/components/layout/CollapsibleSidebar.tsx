@@ -89,7 +89,7 @@ export default function CollapsibleSidebar({ isOpen, onClose }: CollapsibleSideb
                                             : "text-white/60 hover:text-white hover:bg-white/5"
                                     )}
                                 >
-                                    <Icon className={cn("h-4 w-4 transition-colors", isActive ? "text-brand-red-base" : "text-white/40 group-hover:text-white")} />
+                                    <Icon className={cn("h-4 w-4 transition-colors", isActive ? "text-brand-red-base" : "text-white/70 group-hover:text-white")} />
                                     {item.label}
                                 </Link>
                             );
