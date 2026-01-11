@@ -125,4 +125,4 @@ export default memo(function GameCard({ game, featured, variant = 'landscape' }:
             </motion.div>
         </Link>
     );
-}
+});
