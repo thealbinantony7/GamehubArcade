@@ -51,7 +51,7 @@ export default function LobbyContent() {
 
                 {/* 3. Filters Sticky Bar */}
                 <div className="sticky top-16 z-40 bg-[hsl(220,24%,7%)]/95 backdrop-blur-xl py-2 border-b border-white/5 md:border-none">
-                    <div className="flex items-center gap-2 overflow-x-auto scrollbar-hide">
+                    <div className="flex items-center gap-2 overflow-x-auto scrollbar-hide" tabIndex={0} role="region" aria-label="Game filters">
                         {FILTERS.map((f) => {
                             const Icon = f.icon;
                             const active = filter === f.id;

@@ -6,7 +6,6 @@
 import { useNavigate } from 'react-router-dom';
 import { Play, ChevronLeft, ChevronRight } from 'lucide-react';
 import { GameDefinition } from '@/data/games';
-import { useRef } from 'react';
 import { CrashThumbnail, DiceThumbnail, MinesThumbnail, PlinkoThumbnail, TableThumbnail } from './GameThumbnails';
 
 interface FeaturedCarouselProps {
@@ -15,17 +14,6 @@ interface FeaturedCarouselProps {
 
 export default function FeaturedCarousel({ games }: FeaturedCarouselProps) {
     const navigate = useNavigate();
-    const scrollRef = useRef<HTMLDivElement>(null);
-
-    const scroll = (direction: 'left' | 'right') => {
-        if (scrollRef.current) {
-            const scrollAmount = 400;
-            scrollRef.current.scrollBy({
-                left: direction === 'left' ? -scrollAmount : scrollAmount,
-                behavior: 'smooth'
-            });
-        }
-    };
 
     const getThumbnail = (gameId: string) => {
         switch (gameId) {
@@ -42,34 +30,20 @@ export default function FeaturedCarousel({ games }: FeaturedCarouselProps) {
 
     return (
         <div className="relative group">
-            {/* Scroll Buttons */}
-            <button
-                onClick={() => scroll('left')}
-                aria-label="Previous games"
-                className="absolute left-0 top-1/2 -translate-y-1/2 z-10 h-10 w-10 bg-black/60 hover:bg-black/80 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
-            >
-                <ChevronLeft className="h-5 w-5 text-white" />
-            </button>
-            <button
-                onClick={() => scroll('right')}
-                aria-label="Next games"
-                className="absolute right-0 top-1/2 -translate-y-1/2 z-10 h-10 w-10 bg-black/60 hover:bg-black/80 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
-            >
-                <ChevronRight className="h-5 w-5 text-white" />
-            </button>
-
             {/* Carousel */}
             <div
-                ref={scrollRef}
-                className="flex gap-4 overflow-x-auto scrollbar-hide scroll-smooth"
+                className="flex gap-4 overflow-x-auto scrollbar-hide scroll-smooth snap-x snap-mandatory"
                 style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+                tabIndex={0}
+                role="region"
+                aria-label="Featured games carousel"
             >
                 {games.slice(0, 5).map(game => {
                     return (
                         <div
                             key={game.id}
                             onClick={() => navigate(`/casino/${game.id}`)}
-                            className="group/card relative flex-shrink-0 w-[320px] h-[180px] bg-gradient-to-br from-[hsl(220,16%,16%)] to-[hsl(220,16%,12%)] rounded-2xl overflow-hidden cursor-pointer shadow-lg hover:shadow-2xl transition-all duration-300 border border-white/5 hover:border-white/10"
+                            className="group/card snap-start relative flex-shrink-0 w-[320px] h-[180px] bg-gradient-to-br from-[hsl(220,16%,16%)] to-[hsl(220,16%,12%)] rounded-2xl overflow-hidden cursor-pointer shadow-lg hover:shadow-2xl transition-all duration-300 border border-white/5 hover:border-white/10"
                         >
                             {/* Graphic Background (CSS Art) */}
                             <div className="absolute inset-0 opacity-80 group-hover/card:scale-105 transition-transform duration-500">

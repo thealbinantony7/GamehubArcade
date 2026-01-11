@@ -60,7 +60,7 @@ const TickerItem = memo(function TickerItem({ win }: { win: WinEvent }) {
 
     return (
         <div className="inline-flex items-center gap-2 bg-white/5 px-3 py-1 rounded-full border border-white/5 text-xs whitespace-nowrap hover:bg-white/10 transition-colors cursor-default">
-            <span className="text-white/40 font-medium">{win.user}</span>
+            <span className="text-white/70 font-medium">{win.user}</span>
             <span className="text-white/60">•</span>
             <span className="text-white/60">{win.game}</span>
             <span className="text-white/60">•</span>

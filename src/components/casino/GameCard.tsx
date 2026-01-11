@@ -6,7 +6,6 @@
 
 import { useState, memo } from 'react';
 import { Play } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
 import { GameDefinition } from '@/data/games';
 import {
@@ -28,7 +27,6 @@ export default memo(function GameCard({ game, featured, variant = 'landscape' }:
     const [isHovered, setIsHovered] = useState(false);
 
     const getThumbnail = (gameId: string) => {
-        // ... (existing logic)
         switch (gameId) {
             case 'crash': return <CrashThumbnail />;
             case 'dice': return <DiceThumbnail />;
@@ -40,9 +38,6 @@ export default memo(function GameCard({ game, featured, variant = 'landscape' }:
             default: return <TableThumbnail />;
         }
     };
-
-    // Motion priority: featured cards respond faster
-    const transitionSpeed = featured ? 0.15 : 0.3;
 
     const aspectRatioClass = {
         landscape: 'aspect-[16/10]',
@@ -58,14 +53,7 @@ export default memo(function GameCard({ game, featured, variant = 'landscape' }:
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
         >
-            <motion.div
-                layoutId={`game-card-${game.id}`}
-                className="group relative w-full cursor-pointer isolate"
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: transitionSpeed }}
-                whileHover={{ scale: featured ? 1.03 : 1.01 }}
-            >
+            <div className="group relative w-full cursor-pointer isolate">
                 {/* Card Container */}
                 <div className={cn(
                     "relative overflow-hidden rounded-xl bg-brand-obsidian-glass border transition-all duration-300",
@@ -122,7 +110,7 @@ export default memo(function GameCard({ game, featured, variant = 'landscape' }:
                         </div>
                     </div>
                 </div>
-            </motion.div>
+            </div>
         </Link>
     );
 });

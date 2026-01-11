@@ -75,7 +75,7 @@ function TopBar({ onMenuClick, showMenuButton = true }: { onMenuClick?: () => vo
                             {/* Deposit / Register */}
                             <Link
                                 to="/auth?mode=signup"
-                                className="h-10 px-3 md:px-5 bg-brand-red-base hover:bg-brand-red-deep text-white font-medium text-xs md:text-sm rounded-lg transition-colors inline-flex items-center justify-center"
+                                className="h-10 px-3 md:px-5 bg-[#dc2626] hover:bg-[#b91c1c] text-white font-medium text-xs md:text-sm rounded-lg transition-colors inline-flex items-center justify-center"
                             >
                                 Deposit
                             </Link>
