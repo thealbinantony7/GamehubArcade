@@ -24,6 +24,7 @@ import Auth from "./pages/Auth";
 import ProfilePage from "./pages/ProfilePage";
 import Leaderboard from "./pages/Leaderboard";
 import Promotions from "./pages/Promotions";
+import Compliance from "./pages/Compliance";
 import NotFound from "./pages/NotFound";
 
 // Admin
@@ -64,6 +65,7 @@ const App = () => {
                   <Route path="/casino/:gameId" element={<Game />} />
                   <Route path="/leaderboard" element={<Leaderboard />} />
                   <Route path="/promotions" element={<Promotions />} />
+                  <Route path="/compliance" element={<Compliance />} />
 
                   {/* Auth */}
                   <Route path="/auth" element={<Auth />} />

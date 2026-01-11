@@ -16,6 +16,7 @@ interface BetRecord {
     payout: number;
     balanceBefore: number;
     balanceAfter: number;
+    sessionId: string; // Phase 14: Session tracking for compliance
 }
 
 interface WalletState {
@@ -39,6 +40,7 @@ interface WalletState {
     lastSessionEnd: number | null;
     lastSessionLoss: number;
     lastSessionDuration: number;
+    currentSessionId: string; // Phase 14: Current session identifier
 
 
     // Damage Memory (Phase 10/11)
@@ -107,6 +109,7 @@ export const useWalletStore = create<WalletStore>()(
             lastSessionEnd: null,
             lastSessionLoss: 0,
             lastSessionDuration: 0,
+            currentSessionId: `session_${Date.now()}`, // Phase 14: Initial session ID
 
             // Damage Memory
             damageResidue: 0,
@@ -146,12 +149,13 @@ export const useWalletStore = create<WalletStore>()(
                     payout: 0, // Pending
                     balanceBefore,
                     balanceAfter,
+                    sessionId: state.currentSessionId, // Phase 14: Track session
                 };
 
                 set({
                     balance: balanceAfter,
                     lastUpdated: Date.now(),
-                    betHistory: [betRecord, ...state.betHistory].slice(0, 100),
+                    betHistory: [betRecord, ...state.betHistory].slice(0, 500), // Phase 14: Increased from 100 to 500
                     totalBetsPlaced: state.totalBetsPlaced + 1,
                 });
 
@@ -191,9 +195,11 @@ export const useWalletStore = create<WalletStore>()(
 
             resetSession: () => {
                 const currentBalance = get().balance;
+                const newSessionId = `session_${Date.now()}`; // Phase 14: Generate new session ID
                 set({
                     sessionStartBalance: currentBalance,
                     sessionStartTime: Date.now(),
+                    currentSessionId: newSessionId,
                     betHistory: [],
                     totalBetsPlaced: 0,
                     lastUpdated: Date.now(),
@@ -431,6 +437,7 @@ export const useWalletStore = create<WalletStore>()(
                 lastSessionEnd: state.lastSessionEnd,
                 lastSessionLoss: state.lastSessionLoss,
                 lastSessionDuration: state.lastSessionDuration,
+                currentSessionId: state.currentSessionId, // Phase 14: Persist session ID
                 damageResidue: state.damageResidue,
                 residueAgeBuckets: state.residueAgeBuckets,
                 residueLastUpdate: state.residueLastUpdate,

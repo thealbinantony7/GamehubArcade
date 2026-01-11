@@ -2,10 +2,11 @@
  * VERIFY DRAWER — Right slide-in verification panel
  * No modal. No bounce. Glass panel only.
  * Phase 8: Risk limits configuration added.
+ * Phase 14: Audit log export added.
  */
 
 import { memo, useState } from 'react';
-import { X, Copy } from 'lucide-react';
+import { X, Copy, Download } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useWalletStore } from '@/store/wallet.store';
@@ -42,6 +43,33 @@ function VerifyDrawer({ isOpen, onClose, data }: VerifyDrawerProps) {
 
     const copyToClipboard = (text: string) => {
         navigator.clipboard.writeText(text);
+    };
+
+    const exportAuditLog = () => {
+        const betHistory = useWalletStore.getState().betHistory;
+
+        // CSV header
+        const header = 'Timestamp,Game,Bet Amount,Multiplier,Payout,Balance Before,Balance After\n';
+
+        // CSV rows
+        const rows = betHistory.map(bet => {
+            const timestamp = new Date(bet.timestamp).toISOString();
+            return `${timestamp},${bet.game},${bet.betAmount.toFixed(2)},${bet.multiplier.toFixed(2)},${bet.payout.toFixed(2)},${bet.balanceBefore.toFixed(2)},${bet.balanceAfter.toFixed(2)}`;
+        }).join('\n');
+
+        const csv = header + rows;
+
+        // Generate filename with current timestamp
+        const now = new Date();
+        const filename = `gamehub_audit_${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}_${String(now.getHours()).padStart(2, '0')}-${String(now.getMinutes()).padStart(2, '0')}-${String(now.getSeconds()).padStart(2, '0')}.csv`;
+
+        // Trigger download
+        const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = filename;
+        link.click();
+        URL.revokeObjectURL(link.href);
     };
 
     return (
@@ -107,6 +135,19 @@ function VerifyDrawer({ isOpen, onClose, data }: VerifyDrawerProps) {
                                 <a href="#" className="inline-block px-4 py-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded text-xs font-mono text-white/90 uppercase tracking-wider transition-colors">
                                     Verify Externally
                                 </a>
+                            </section>
+
+                            <section>
+                                <h3 className="text-sm font-bold text-white uppercase tracking-wide mb-3">Audit Export</h3>
+                                <button
+                                    onClick={exportAuditLog}
+                                    aria-label="Export audit log as CSV"
+                                    className="inline-flex items-center gap-2 px-4 py-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded text-xs font-mono text-white/90 uppercase tracking-wider transition-colors"
+                                >
+                                    <Download className="w-3 h-3" />
+                                    Export CSV
+                                </button>
+                                <p className="text-xs text-white/40 mt-2">Download complete bet history for external verification</p>
                             </section>
 
                             <SessionHistorySection />
