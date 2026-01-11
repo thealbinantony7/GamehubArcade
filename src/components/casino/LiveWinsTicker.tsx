@@ -40,7 +40,14 @@ export default function LiveWinsTicker() {
     // Let's stick to the 'Ambient Motion' goal: A smooth, un-janking stream.
 
     return (
-        <div className="w-full overflow-hidden bg-[hsl(220,20%,8%)] border-b border-white/5 py-1.5 relative z-10">
+        <div
+            className="w-full overflow-hidden bg-[hsl(220,20%,8%)] border-b border-white/5 py-1.5 relative z-10"
+            aria-live="polite"
+            aria-atomic="false"
+            role="region"
+            aria-label="Live wins ticker"
+        >
+            <span className="sr-only">Recent wins updating</span>
             {/* Gradient Masks for Fade In/Out */}
             <div className="absolute left-0 top-0 bottom-0 w-16 bg-gradient-to-r from-[hsl(220,20%,8%)] to-transparent z-20 pointer-events-none" />
             <div className="absolute right-0 top-0 bottom-0 w-16 bg-gradient-to-l from-[hsl(220,20%,8%)] to-transparent z-20 pointer-events-none" />

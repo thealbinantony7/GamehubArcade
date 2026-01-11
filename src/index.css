@@ -22,6 +22,15 @@
     --z-verify-drawer: 70;
     --z-bottom-nav: 75;
     --z-toast: 80;
+
+    /* Motion Design Tokens */
+    --motion-duration-instant: 100ms;
+    --motion-duration-fast: 150ms;
+    --motion-duration-normal: 200ms;
+    --motion-duration-slow: 300ms;
+    --motion-ease-in: cubic-bezier(0.4, 0, 1, 1);
+    --motion-ease-out: cubic-bezier(0, 0, 0.2, 1);
+    --motion-ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   * {
@@ -42,6 +51,7 @@
     letter-spacing: -0.02em;
   }
 }
+
 
 @layer components {
 
@@ -198,6 +208,30 @@
     to {
       opacity: 1;
       transform: translateY(0);
+    }
+  }
+
+  /* Reduced Motion Support (WCAG 2.3.3) */
+  @media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+
+    .animate-ticker,
+    .animate-shimmer,
+    .animate-flash,
+    .animate-pulse-slow,
+    .animate-fade-in {
+      animation: none !important;
+    }
+
+    .glass-card:hover {
+      transform: none !important;
     }
   }
 }

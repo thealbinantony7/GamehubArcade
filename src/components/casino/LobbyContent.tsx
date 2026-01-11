@@ -60,6 +60,8 @@ export default function LobbyContent() {
                                 <button
                                     key={f.id}
                                     onClick={() => setFilter(f.id)}
+                                    aria-pressed={active}
+                                    aria-label={`${f.label} filter, ${active ? 'active' : 'inactive'}`}
                                     className={cn(
                                         "flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wide transition-all whitespace-nowrap",
                                         active

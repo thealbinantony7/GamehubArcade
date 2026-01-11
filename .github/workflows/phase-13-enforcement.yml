@@ -1,0 +1,234 @@
+name: Phase 13 Enforcement (Hard Gates)
+
+on:
+  pull_request:
+  push:
+    branches: [main, production]
+
+jobs:
+  accessibility:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      
+      - run: npm ci
+      - run: npm install -D @axe-core/cli lighthouse
+      - run: npm run build
+      - run: npx serve -s dist -p 3000 &
+      - run: sleep 5
+      
+      - name: axe-core scan
+        run: |
+          npx axe http://localhost:3000 --output axe-report.json
+          VIOLATIONS=$(jq '.violations | length' axe-report.json)
+          if [ "$VIOLATIONS" -ne 0 ]; then
+            echo "❌ FAIL: $VIOLATIONS axe violations"
+            jq '.violations' axe-report.json
+            exit 1
+          fi
+      
+      - name: Lighthouse Accessibility
+        run: |
+          npx lighthouse http://localhost:3000 \
+            --only-categories=accessibility \
+            --output=json \
+            --output-path=lighthouse-a11y.json \
+            --chrome-flags="--headless --no-sandbox"
+          SCORE=$(jq '.categories.accessibility.score * 100' lighthouse-a11y.json)
+          if (( $(echo "$SCORE < 95" | bc -l) )); then
+            echo "❌ FAIL: Accessibility score $SCORE < 95"
+            exit 1
+          fi
+          echo "✅ PASS: Accessibility score $SCORE"
+      
+      - uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: accessibility-reports
+          path: |
+            axe-report.json
+            lighthouse-a11y.json
+
+  performance:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      
+      - run: npm ci
+      - run: npm run build
+      - run: npx serve -s dist -p 3000 &
+      - run: sleep 5
+      
+      - name: Lighthouse Performance
+        run: |
+          npx lighthouse http://localhost:3000 \
+            --only-categories=performance \
+            --output=json \
+            --output-path=lighthouse-perf.json \
+            --chrome-flags="--headless --no-sandbox"
+          
+          CLS=$(jq '.audits."cumulative-layout-shift".numericValue' lighthouse-perf.json)
+          INP=$(jq '.audits."max-potential-fid".numericValue' lighthouse-perf.json)
+          
+          echo "CLS: $CLS"
+          echo "INP: $INP"
+          
+          if (( $(echo "$CLS >= 0.1" | bc -l) )); then
+            echo "❌ FAIL: CLS $CLS >= 0.1"
+            exit 1
+          fi
+          
+          if (( $(echo "$INP >= 200" | bc -l) )); then
+            echo "❌ FAIL: INP $INP >= 200ms"
+            exit 1
+          fi
+          
+          echo "✅ PASS: CLS $CLS, INP $INP"
+      
+      - uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: performance-reports
+          path: lighthouse-perf.json
+
+  banned-patterns:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Check confetti deleted
+        run: |
+          if [ -f "src/utils/confetti.ts" ]; then
+            echo "❌ CRITICAL FAIL: confetti.ts exists (emotional manipulation)"
+            exit 1
+          fi
+          echo "✅ PASS: confetti.ts deleted"
+      
+      - name: Check canvas-confetti removed
+        run: |
+          if grep -q "canvas-confetti" package.json; then
+            echo "❌ CRITICAL FAIL: canvas-confetti in dependencies"
+            exit 1
+          fi
+          echo "✅ PASS: canvas-confetti removed"
+      
+      - name: Scan for fake delays
+        run: |
+          FAKE_DELAYS=$(grep -rn "setTimeout.*setLoading\|setTimeout.*setProgress" src/ || true)
+          if [ ! -z "$FAKE_DELAYS" ]; then
+            echo "❌ FAIL: Fake delays detected:"
+            echo "$FAKE_DELAYS"
+            exit 1
+          fi
+          echo "✅ PASS: No fake delays"
+      
+      - name: Scan for emotional language
+        run: |
+          EMOTIONAL=$(grep -rni "amazing\|so close\|try again" src/components src/pages || true)
+          if [ ! -z "$EMOTIONAL" ]; then
+            echo "❌ FAIL: Emotional language detected:"
+            echo "$EMOTIONAL"
+            exit 1
+          fi
+          echo "✅ PASS: No emotional language"
+      
+      - name: Scan for triggerWinCelebration
+        run: |
+          CELEBRATION=$(grep -rn "triggerWinCelebration\|triggerSmallCelebration" src/ || true)
+          if [ ! -z "$CELEBRATION" ]; then
+            echo "❌ FAIL: Win celebration functions detected:"
+            echo "$CELEBRATION"
+            exit 1
+          fi
+          echo "✅ PASS: No celebration functions"
+
+  observability:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Check web-vitals installed
+        run: |
+          if ! grep -q "web-vitals" package.json; then
+            echo "❌ FAIL: web-vitals not installed"
+            exit 1
+          fi
+          echo "✅ PASS: web-vitals installed"
+      
+      - name: Check ErrorBoundary exists
+        run: |
+          if ! grep -rq "ErrorBoundary" src/; then
+            echo "❌ FAIL: ErrorBoundary not implemented"
+            exit 1
+          fi
+          echo "✅ PASS: ErrorBoundary exists"
+      
+      - name: Check analytics implementation
+        run: |
+          if [ ! -f "src/services/analytics.ts" ]; then
+            echo "❌ FAIL: analytics.ts missing"
+            exit 1
+          fi
+          echo "✅ PASS: analytics.ts exists"
+      
+      - name: Check OBSERVABILITY.md
+        run: |
+          if [ ! -f "OBSERVABILITY.md" ]; then
+            echo "❌ FAIL: OBSERVABILITY.md missing"
+            exit 1
+          fi
+          echo "✅ PASS: OBSERVABILITY.md exists"
+
+  motion-tokens:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Check motion tokens
+        run: |
+          if ! grep -q "motion-duration-fast" src/index.css; then
+            echo "❌ FAIL: Motion tokens not defined"
+            exit 1
+          fi
+          echo "✅ PASS: Motion tokens defined"
+      
+      - name: Check reduced motion
+        run: |
+          if ! grep -q "prefers-reduced-motion: reduce" src/index.css; then
+            echo "❌ FAIL: prefers-reduced-motion not implemented"
+            exit 1
+          fi
+          echo "✅ PASS: prefers-reduced-motion implemented"
+
+  aria-labels:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Check filter aria-pressed
+        run: |
+          if ! grep -q "aria-pressed" src/components/casino/LobbyContent.tsx; then
+            echo "❌ FAIL: Filter buttons missing aria-pressed"
+            exit 1
+          fi
+          echo "✅ PASS: Filter aria-pressed exists"
+      
+      - name: Check game card aria-label
+        run: |
+          if ! grep -q 'aria-label.*Play' src/components/casino/GameCard.tsx; then
+            echo "❌ FAIL: Game cards missing aria-label"
+            exit 1
+          fi
+          echo "✅ PASS: Game card aria-label exists"
+
+  deploy-gate:
+    runs-on: ubuntu-latest
+    needs: [accessibility, performance, banned-patterns, observability, motion-tokens, aria-labels]
+    steps:
+      - run: echo "✅ All Phase 13 gates passed — deployment authorized"

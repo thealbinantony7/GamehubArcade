@@ -53,6 +53,7 @@ export default function GameCard({ game, featured, variant = 'landscape' }: Game
     return (
         <Link
             to={`/casino/${game.id}`}
+            aria-label={`Play ${game.name}, ${game.category || 'casino'} game`}
             className="block w-full h-full outline-none focus-visible:ring-2 focus-visible:ring-brand-red-base rounded-xl"
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
