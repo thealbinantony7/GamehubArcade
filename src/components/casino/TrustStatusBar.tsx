@@ -60,56 +60,57 @@ function TrustStatusBar({ onVerifyClick }: TrustStatusBarProps) {
                         <span className="text-white/60 uppercase tracking-wider">LIVE</span>
                     </div>
 
-                    {/* Damage Residue Ticks */}
-                    <DamageResidueTicks />
-
-                    <span className="text-white/40">•</span>
+                    <span className="text-slate-400">•</span>
                     <span className="text-white/90 uppercase tracking-wide">FAIR • VERIFIED</span>
                 </div>
 
-                {/* CENTER: Metrics or Lock Status */}
-                <div className="hidden md:flex items-center gap-3">
-                    {isBettingBlocked ? (
-                        <>
-                            <span className="text-brand-red-base font-bold uppercase tracking-wider">
-                                {blockReason === 'COOLDOWN ACTIVE' ? `COOLDOWN • ${formatCooldown(cooldownSeconds)}` : blockReason}
-                            </span>
-                        </>
-                    ) : (
-                        <>
-                            {sessionLossLimit !== null && (
-                                <>
-                                    <div className="flex items-center gap-1.5">
-                                        <span className="text-white/40 uppercase">SESSION LOSS:</span>
-                                        <span className="text-white font-bold tabular-nums">
-                                            -${sessionLoss.toFixed(2)} / ${sessionLossLimit.toFixed(2)}
-                                        </span>
-                                    </div>
-                                    <span className="text-white/40">•</span>
-                                </>
-                            )}
-                            <div className="flex items-center gap-1.5">
-                                <span className="text-white/40 uppercase">RTP:</span>
-                                <span className="text-white font-bold tabular-nums">{rtp.toFixed(2)}%</span>
-                            </div>
-                            <span className="text-white/40">•</span>
-                            <div className="flex items-center gap-1.5">
-                                <span className="text-white/40 uppercase">HASH:</span>
-                                <span className="text-white/60 tabular-nums">{currentHash}</span>
-                            </div>
-                        </>
-                    )}
-                </div>
-
-                {/* RIGHT: Verify Button */}
-                <button
-                    onClick={onVerifyClick}
-                    className="px-3 py-1 bg-white/5 hover:bg-white/10 border border-white/10 rounded text-white/90 uppercase tracking-wider transition-colors active:scale-95"
-                >
-                    VERIFY
-                </button>
+                {/* Damage Residue Ticks */}
+                <DamageResidueTicks />
             </div>
+
+            {/* CENTER: Metrics or Lock Status */}
+            <div className="hidden md:flex items-center gap-3">
+                {isBettingBlocked ? (
+                    <>
+                        <span className="text-brand-red-base font-bold uppercase tracking-wider">
+                            {blockReason === 'COOLDOWN ACTIVE' ? `COOLDOWN • ${formatCooldown(cooldownSeconds)}` : blockReason}
+                        </span>
+                    </>
+                ) : (
+                    <>
+                        {sessionLossLimit !== null && (
+                            <>
+                                <div className="flex items-center gap-1.5">
+                                    <span className="text-slate-400 uppercase">SESSION LOSS:</span>
+                                    <span className="text-white font-bold tabular-nums">
+                                        -${sessionLoss.toFixed(2)} / ${sessionLossLimit.toFixed(2)}
+                                    </span>
+                                </div>
+                                <span className="text-slate-400">•</span>
+                            </>
+                        )}
+                        <div className="flex items-center gap-1.5">
+                            <span className="text-slate-400 uppercase">RTP:</span>
+                            <span className="text-white font-bold tabular-nums">{rtp.toFixed(2)}%</span>
+                        </div>
+                        <span className="text-slate-400">•</span>
+                        <div className="flex items-center gap-1.5">
+                            <span className="text-slate-400 uppercase">HASH:</span>
+                            <span className="text-white/60 tabular-nums">{currentHash}</span>
+                        </div>
+                    </>
+                )}
+            </div>
+
+            {/* RIGHT: Verify Button */}
+            <button
+                onClick={onVerifyClick}
+                className="px-3 py-1 bg-white/5 hover:bg-white/10 border border-white/10 rounded text-white/90 uppercase tracking-wider transition-colors active:scale-95"
+            >
+                VERIFY
+            </button>
         </div>
+        </div >
     );
 }
 

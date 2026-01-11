@@ -101,7 +101,7 @@ export default function GameTheater() {
                 <div className="flex items-center justify-between px-4 md:px-6 py-3 bg-black/40 backdrop-blur-xl border-b border-white/5">
                     <button
                         onClick={handleClose}
-                        className="flex items-center gap-2 text-white/40 hover:text-white transition-colors group"
+                        className="flex items-center gap-2 text-white/70 hover:text-white transition-colors group"
                     >
                         <ArrowLeft className="h-4 w-4 group-hover:-translate-x-1 transition-transform" />
                         <span className="text-xs font-medium uppercase tracking-wider">Lobby</span>
@@ -128,7 +128,7 @@ export default function GameTheater() {
 
                     <button
                         onClick={handleClose}
-                        className="h-8 w-8 flex items-center justify-center rounded-lg hover:bg-white/10 text-white/40 hover:text-white transition-all"
+                        className="h-8 w-8 flex items-center justify-center rounded-lg hover:bg-white/10 text-white/70 hover:text-white transition-all"
                     >
                         <X className="h-4 w-4" />
                     </button>
@@ -183,10 +183,10 @@ export default function GameTheater() {
                     <div className="flex items-center gap-4 text-xs">
                         <div className="flex items-center gap-1.5">
                             <div className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse" />
-                            <span className="text-white/40 uppercase tracking-wide">Live</span>
+                            <span className="text-slate-400 uppercase tracking-wide">Live</span>
                         </div>
-                        <span className="text-white/20">|</span>
-                        <span className="text-white/40">RTP: <span className="text-white font-bold">98.5%</span></span>
+                        <span className="text-slate-500">|</span>
+                        <span className="text-slate-400">RTP: <span className="text-white font-bold">98.5%</span></span>
                     </div>
 
                     <div className="hidden md:flex items-center gap-2 text-xs text-white/30">
