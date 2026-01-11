@@ -110,7 +110,6 @@ function TrustStatusBar({ onVerifyClick }: TrustStatusBarProps) {
                 VERIFY
             </button>
         </div>
-        </div >
     );
 }
 
