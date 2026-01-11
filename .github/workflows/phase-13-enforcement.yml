@@ -25,7 +25,7 @@ jobs:
       
       - name: axe-core scan
         run: |
-          npx axe http://localhost:3000 --output axe-report.json
+          npx axe http://localhost:3000 > axe-report.json
           VIOLATIONS=$(jq '.violations | length' axe-report.json)
           if [ "$VIOLATIONS" -ne 0 ]; then
             echo "❌ FAIL: $VIOLATIONS axe violations"

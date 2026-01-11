@@ -5,7 +5,7 @@
  */
 
 import { cn } from "@/lib/utils";
-import { useEffect, useState } from "react";
+import { useEffect, useState, memo } from "react";
 
 // Fake users for the feed
 const USERS = ["Hidden", "Anon", "Player1", "Whale", "Sniper", "Lucky", "HighRoller", "VipUser"];
@@ -70,7 +70,7 @@ export default function LiveWinsTicker() {
     );
 }
 
-function TickerItem({ win }: { win: WinEvent }) {
+const TickerItem = memo(function TickerItem({ win }: { win: WinEvent }) {
     const multiplier = (win.amount / 100).toFixed(2); // Mock multiplier
     const profit = win.amount;
 

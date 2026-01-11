@@ -23,7 +23,11 @@ interface GameCardProps {
     featured?: boolean;
 }
 
-export default function GameCard({ game, featured, variant = 'landscape' }: GameCardProps & { variant?: 'landscape' | 'portrait' | 'square' }) {
+import { useState, memo } from 'react';
+
+// ... imports
+
+export default memo(function GameCard({ game, featured, variant = 'landscape' }: GameCardProps & { variant?: 'landscape' | 'portrait' | 'square' }) {
     const navigate = useNavigate();
     const [isHovered, setIsHovered] = useState(false);
 
