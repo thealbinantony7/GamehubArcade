@@ -15,10 +15,13 @@ jobs:
           node-version: 18
       
       - run: npm ci
-      - run: npm install -D @axe-core/cli lighthouse
+      - run: npm install -D @axe-core/cli lighthouse serve wait-on
       - run: npm run build
-      - run: npx serve -s dist -p 3000 &
-      - run: sleep 5
+      
+      - name: Start dev server
+        run: |
+          npx serve -s dist -p 3000 &
+          npx wait-on http://localhost:3000 -t 30000
       
       - name: axe-core scan
         run: |
@@ -36,7 +39,7 @@ jobs:
             --only-categories=accessibility \
             --output=json \
             --output-path=lighthouse-a11y.json \
-            --chrome-flags="--headless --no-sandbox"
+            --chrome-flags="--headless --no-sandbox --disable-gpu"
           SCORE=$(jq '.categories.accessibility.score * 100' lighthouse-a11y.json)
           if (( $(echo "$SCORE < 95" | bc -l) )); then
             echo "❌ FAIL: Accessibility score $SCORE < 95"
@@ -61,9 +64,13 @@ jobs:
           node-version: 18
       
       - run: npm ci
+      - run: npm install -D lighthouse serve wait-on
       - run: npm run build
-      - run: npx serve -s dist -p 3000 &
-      - run: sleep 5
+      
+      - name: Start dev server
+        run: |
+          npx serve -s dist -p 3000 &
+          npx wait-on http://localhost:3000 -t 30000
       
       - name: Lighthouse Performance
         run: |
@@ -71,7 +78,7 @@ jobs:
             --only-categories=performance \
             --output=json \
             --output-path=lighthouse-perf.json \
-            --chrome-flags="--headless --no-sandbox"
+            --chrome-flags="--headless --no-sandbox --disable-gpu"
           
           CLS=$(jq '.audits."cumulative-layout-shift".numericValue' lighthouse-perf.json)
           INP=$(jq '.audits."max-potential-fid".numericValue' lighthouse-perf.json)
