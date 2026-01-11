@@ -39,7 +39,7 @@ export default function AppShell({ children }: AppShellProps) {
             if (shouldShowRealityCheck()) {
                 setRealityCheckOpen(true);
             }
-        }, 60000); // Check every minute
+        }, 300000); // Check every 5 minutes (reduced from 1 min to minimize INP)
 
         return () => clearInterval(checkInterval);
     }, [shouldShowRealityCheck]);
