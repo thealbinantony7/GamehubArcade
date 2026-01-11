@@ -1,18 +1,9 @@
 /**
  * PLINKO GAME — Canonical Casino Game
- * Phase 16: Real-money ready, provably fair
- * 
- * RULES:
- * - Outcome computed before animation
- * - CSS-only animation (≤800ms)
- * - Keyboard playable
- * - Full accessibility
- * - No Math.random
+ * Phase 18: GameShell integration for premium feel
  */
 
 import { useState, useEffect } from 'react';
-import { ArrowLeft, Play, RotateCcw } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
 import { useWalletStore } from '@/store/wallet.store';
 import {
     generateServerSeed,
@@ -23,12 +14,15 @@ import {
     type PlinkoOutcome,
 } from '@/lib/plinko.engine';
 import { cn } from '@/lib/utils';
+import GameShell from '@/components/layout/GameShell';
+import GameSidebar from '@/components/game/GameSidebar';
 
 const ROWS = 16;
 const MULTIPLIERS = getMultiplierTable();
+const RTP = calculateRTP() * 100;
+const HOUSE_EDGE = 100 - RTP;
 
 export default function PlinkoGame() {
-    const navigate = useNavigate();
     const placeBet = useWalletStore(state => state.placeBet);
     const resolveBet = useWalletStore(state => state.resolveBet);
     const balance = useWalletStore(state => state.balance);
@@ -43,7 +37,6 @@ export default function PlinkoGame() {
     const [outcome, setOutcome] = useState<PlinkoOutcome | null>(null);
     const [showResult, setShowResult] = useState(false);
 
-    // Generate new server seed on mount
     useEffect(() => {
         const newServerSeed = generateServerSeed();
         setServerSeed(newServerSeed);
@@ -53,74 +46,58 @@ export default function PlinkoGame() {
     const handleDrop = () => {
         if (isBettingBlocked || isPlaying || betAmount > balance) return;
 
-        // Place bet
         const betId = placeBet('Plinko', betAmount);
         if (!betId) return;
 
-        // Compute outcome BEFORE animation
         const result = computePlinkoOutcome(serverSeed, clientSeed, nonce, betAmount);
         setOutcome(result);
         setIsPlaying(true);
         setShowResult(false);
 
-        // Animation duration (fixed 800ms)
         setTimeout(() => {
             setIsPlaying(false);
             setShowResult(true);
-
-            // Resolve bet
             resolveBet(betId, result.multiplier);
-
-            // Increment nonce for next bet
             setNonce(prev => prev + 1);
 
-            // Generate new server seed for next round
             const newServerSeed = generateServerSeed();
             setServerSeed(newServerSeed);
             setServerSeedHash(hashServerSeed(newServerSeed));
         }, 800);
     };
 
-    const handleReset = () => {
-        setOutcome(null);
-        setShowResult(false);
-    };
+    useEffect(() => {
+        const handleKeyPress = (e: KeyboardEvent) => {
+            if (e.code === 'Space' && !isPlaying && !isBettingBlocked && betAmount <= balance) {
+                e.preventDefault();
+                handleDrop();
+            }
+        };
+        window.addEventListener('keydown', handleKeyPress);
+        return () => window.removeEventListener('keydown', handleKeyPress);
+    }, [isPlaying, isBettingBlocked, betAmount, balance, handleDrop]);
 
     return (
-        <div className="min-h-screen bg-brand-obsidian-base p-4">
-            {/* Header */}
-            <div className="max-w-6xl mx-auto mb-6">
-                <button
-                    onClick={() => navigate('/')}
-                    className="flex items-center gap-2 text-white/60 hover:text-white transition-colors"
-                    aria-label="Back to lobby"
-                >
-                    <ArrowLeft className="h-4 w-4" />
-                    <span>Back to Lobby</span>
-                </button>
-            </div>
-
-            <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-6">
-                {/* Game Board */}
-                <div className="lg:col-span-2 bg-brand-obsidian-glass border border-brand-obsidian-border rounded-lg p-6">
-                    <h1 className="text-2xl font-bold text-white mb-4">Plinko</h1>
-
-                    {/* Plinko Board Visualization */}
-                    <div className="bg-brand-obsidian-base rounded-lg p-8 mb-6">
-                        <div className="relative" style={{ height: '500px' }}>
-                            {/* Pegs (visual only) */}
+        <GameShell gameName="Plinko" rtp={RTP} houseEdge={HOUSE_EDGE}>
+            <div className="flex gap-6 w-full max-w-[1600px]">
+                {/* Game Stage (Center) */}
+                <div className="flex-1 flex flex-col items-center justify-center">
+                    {/* Plinko Board */}
+                    <div className="bg-[#1a1a1a] rounded-lg p-8 mb-6">
+                        <div className="relative" style={{ height: '500px', width: '600px' }}>
+                            {/* Pegs */}
                             {Array.from({ length: ROWS }).map((_, row) => (
                                 <div key={row} className="flex justify-center gap-8 mb-4">
                                     {Array.from({ length: row + 2 }).map((_, col) => (
                                         <div
                                             key={col}
-                                            className="w-2 h-2 bg-white/20 rounded-full"
+                                            className="w-2 h-2 bg-white/30 rounded-full"
                                         />
                                     ))}
                                 </div>
                             ))}
 
-                            {/* Ball (CSS animation) */}
+                            {/* Ball */}
                             {isPlaying && outcome && (
                                 <div
                                     className="absolute top-0 left-1/2 w-4 h-4 bg-green-500 rounded-full -translate-x-1/2"
@@ -156,7 +133,7 @@ export default function PlinkoGame() {
 
                     {/* Result Display */}
                     {showResult && outcome && (
-                        <div className="bg-green-500/10 border border-green-500/40 rounded-lg p-4 mb-4">
+                        <div className="bg-green-500/10 border border-green-500/40 rounded-lg p-4">
                             <div className="text-center">
                                 <div className="text-sm text-white/60 mb-1">Result</div>
                                 <div className="text-3xl font-bold text-green-500">
@@ -170,93 +147,21 @@ export default function PlinkoGame() {
                     )}
                 </div>
 
-                {/* Controls Panel */}
-                <div className="space-y-4">
-                    {/* Bet Amount */}
-                    <div className="bg-brand-obsidian-glass border border-brand-obsidian-border rounded-lg p-4">
-                        <label className="block text-sm text-white/60 mb-2">Bet Amount</label>
-                        <input
-                            type="number"
-                            value={betAmount}
-                            onChange={(e) => setBetAmount(Number(e.target.value))}
-                            min="1"
-                            max={balance}
-                            disabled={isPlaying}
-                            className="w-full bg-brand-obsidian-base border border-white/10 rounded px-3 py-2 text-white font-mono"
-                            aria-label="Bet amount"
-                        />
-                    </div>
-
-                    {/* Drop Button */}
-                    <button
-                        onClick={handleDrop}
-                        disabled={isPlaying || isBettingBlocked || betAmount > balance}
-                        className="w-full bg-green-600 hover:bg-green-700 disabled:bg-white/10 disabled:text-white/40 text-white font-bold py-3 rounded transition-colors flex items-center justify-center gap-2"
-                        aria-label="Drop ball"
-                    >
-                        <Play className="h-4 w-4" />
-                        Drop Ball
-                    </button>
-
-                    {/* Reset Button */}
-                    {showResult && (
-                        <button
-                            onClick={handleReset}
-                            className="w-full bg-white/10 hover:bg-white/20 text-white font-bold py-2 rounded transition-colors flex items-center justify-center gap-2"
-                            aria-label="Reset game"
-                        >
-                            <RotateCcw className="h-4 w-4" />
-                            Play Again
-                        </button>
-                    )}
-
-                    {/* Game Info */}
-                    <div className="bg-brand-obsidian-glass border border-brand-obsidian-border rounded-lg p-4">
-                        <h3 className="text-sm font-bold text-white mb-2">Game Info</h3>
-                        <div className="space-y-1 text-xs">
-                            <div className="flex justify-between">
-                                <span className="text-white/60">RTP:</span>
-                                <span className="text-white font-mono">{(calculateRTP() * 100).toFixed(2)}%</span>
-                            </div>
-                            <div className="flex justify-between">
-                                <span className="text-white/60">Rows:</span>
-                                <span className="text-white">{ROWS}</span>
-                            </div>
-                            <div className="flex justify-between">
-                                <span className="text-white/60">Max Multiplier:</span>
-                                <span className="text-white">16x</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Provably Fair */}
-                    <div className="bg-brand-obsidian-glass border border-brand-obsidian-border rounded-lg p-4">
-                        <h3 className="text-sm font-bold text-white mb-2">Provably Fair</h3>
-                        <div className="space-y-2 text-xs">
-                            <div>
-                                <div className="text-white/60 mb-1">Server Seed (Hashed)</div>
-                                <div className="font-mono text-white/80 break-all text-[10px]">
-                                    {serverSeedHash.substring(0, 32)}...
-                                </div>
-                            </div>
-                            <div>
-                                <div className="text-white/60 mb-1">Client Seed</div>
-                                <input
-                                    type="text"
-                                    value={clientSeed}
-                                    onChange={(e) => setClientSeed(e.target.value)}
-                                    disabled={isPlaying}
-                                    className="w-full bg-brand-obsidian-base border border-white/10 rounded px-2 py-1 text-white/80 font-mono text-[10px]"
-                                    aria-label="Client seed"
-                                />
-                            </div>
-                            <div>
-                                <div className="text-white/60 mb-1">Nonce</div>
-                                <div className="font-mono text-white">{nonce}</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                {/* Sidebar */}
+                <GameSidebar
+                    betAmount={betAmount}
+                    onBetAmountChange={setBetAmount}
+                    onDrop={handleDrop}
+                    isPlaying={isPlaying}
+                    disabled={isBettingBlocked || betAmount > balance}
+                    rtp={RTP}
+                    rows={ROWS}
+                    maxMultiplier={16}
+                    serverSeedHash={serverSeedHash}
+                    clientSeed={clientSeed}
+                    onClientSeedChange={setClientSeed}
+                    nonce={nonce}
+                />
             </div>
 
             {/* CSS Animation */}
@@ -278,6 +183,6 @@ export default function PlinkoGame() {
                     }
                 }
             `}</style>
-        </div>
+        </GameShell>
     );
 }
