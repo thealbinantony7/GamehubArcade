@@ -64,7 +64,7 @@ export default function LobbyContent() {
                                     className={cn(
                                         "flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wide transition-all whitespace-nowrap",
                                         active
-                                            ? "bg-brand-red-base text-white shadow-red-glow"
+                                            ? "bg-[#dc2626] text-white shadow-red-glow"
                                             : "bg-white/5 text-white/70 hover:text-white hover:bg-white/10"
                                     )}
                                 >

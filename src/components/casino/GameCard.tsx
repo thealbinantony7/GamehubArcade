@@ -4,7 +4,7 @@
  * Replaces the basic div blocks in GameGrid.
  */
 
-import { useState, memo } from 'react';
+import { memo } from 'react';
 import { Play } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { GameDefinition } from '@/data/games';
@@ -24,7 +24,6 @@ interface GameCardProps {
 
 export default memo(function GameCard({ game, featured, variant = 'landscape' }: GameCardProps & { variant?: 'landscape' | 'portrait' | 'square' }) {
     const navigate = useNavigate();
-    const [isHovered, setIsHovered] = useState(false);
 
     const getThumbnail = (gameId: string) => {
         switch (gameId) {
@@ -50,8 +49,6 @@ export default memo(function GameCard({ game, featured, variant = 'landscape' }:
             to={`/casino/${game.id}`}
             aria-label={`Play ${game.name}, ${game.category || 'casino'} game`}
             className="block w-full h-full outline-none focus-visible:ring-2 focus-visible:ring-brand-red-base rounded-xl"
-            onMouseEnter={() => setIsHovered(true)}
-            onMouseLeave={() => setIsHovered(false)}
         >
             <div className="group relative w-full cursor-pointer isolate">
                 {/* Card Container */}
@@ -74,10 +71,7 @@ export default memo(function GameCard({ game, featured, variant = 'landscape' }:
                         <div className="absolute inset-0 bg-gradient-to-t from-[hsl(220,20%,8%)] via-transparent to-transparent opacity-60" />
 
                         {/* Hover Overlay (Darkens for button pop) */}
-                        <div className={cn(
-                            "absolute inset-0 bg-black/40 transition-opacity duration-300 flex items-center justify-center backdrop-blur-[2px]",
-                            isHovered ? "opacity-100" : "opacity-0"
-                        )}>
+                        <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center backdrop-blur-[2px]">
                             <div className={cn(
                                 "w-12 h-12 rounded-full flex items-center justify-center transform scale-75 transition-all duration-300 group-hover:scale-100",
                                 featured
@@ -96,7 +90,7 @@ export default memo(function GameCard({ game, featured, variant = 'landscape' }:
                                 <h3 className="text-sm font-bold text-white tracking-wide group-hover:text-white transition-colors">
                                     {game.name}
                                 </h3>
-                                <p className="text-[10px] uppercase font-bold text-white/30 mt-0.5 tracking-wider group-hover:text-white/50 transition-colors">
+                                <p className="text-[10px] uppercase font-bold text-white/70 mt-0.5 tracking-wider group-hover:text-white/50 transition-colors">
                                     Original
                                 </p>
                             </div>

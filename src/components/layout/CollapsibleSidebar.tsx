@@ -65,7 +65,8 @@ export default function CollapsibleSidebar({ isOpen, onClose }: CollapsibleSideb
                     {/* Mobile Close Button */}
                     <button
                         onClick={onClose}
-                        className="lg:hidden h-8 w-8 flex items-center justify-center text-white/40 hover:text-white transition-colors rounded-lg hover:bg-white/5"
+                        aria-label="Close sidebar"
+                        className="lg:hidden h-8 w-8 flex items-center justify-center text-white/70 hover:text-white transition-colors rounded-lg hover:bg-white/5"
                     >
                         <ChevronLeft className="h-5 w-5" />
                     </button>
@@ -100,7 +101,7 @@ export default function CollapsibleSidebar({ isOpen, onClose }: CollapsibleSideb
 
                     {/* Games */}
                     <div className="px-4 space-y-1">
-                        <div className="px-4 py-3 text-xs font-bold text-white/30 uppercase tracking-widest">
+                        <div className="px-4 py-3 text-xs font-bold text-white/70 uppercase tracking-widest">
                             Games
                         </div>
                         {GAMES.map(game => {
