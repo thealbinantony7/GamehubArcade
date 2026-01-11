@@ -65,10 +65,10 @@ export default function LobbyContent() {
                                         "flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wide transition-all whitespace-nowrap",
                                         active
                                             ? "bg-brand-red-base text-white shadow-red-glow"
-                                            : "bg-white/5 text-white/40 hover:text-white hover:bg-white/10"
+                                            : "bg-white/5 text-white/70 hover:text-white hover:bg-white/10"
                                     )}
                                 >
-                                    <Icon className={cn("h-3.5 w-3.5", active ? "text-white" : "text-white/40")} />
+                                    <Icon className={cn("h-3.5 w-3.5", active ? "text-white" : "text-white/70")} />
                                     {f.label}
                                 </button>
                             )

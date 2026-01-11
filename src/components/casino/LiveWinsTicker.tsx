@@ -1,11 +1,5 @@
-/**
- * LIVE WINS TICKER
- * Horizontal infinite scroll of winning bets
- * Creates FOMO and social proof
- */
-
 import { cn } from "@/lib/utils";
-import { useEffect, useState, memo } from "react";
+import { memo } from "react";
 
 // Fake users for the feed
 const USERS = ["Hidden", "Anon", "Player1", "Whale", "Sniper", "Lucky", "HighRoller", "VipUser"];
@@ -19,26 +13,16 @@ interface WinEvent {
     color: string;
 }
 
+// Static wins - no state updates
+const STATIC_WINS: WinEvent[] = Array.from({ length: 10 }).map((_, i) => ({
+    id: i,
+    user: USERS[Math.floor(Math.random() * USERS.length)],
+    game: GAMES[Math.floor(Math.random() * GAMES.length)],
+    amount: Math.floor(Math.random() * 500) + 10,
+    color: "text-[hsl(145,70%,45%)]"
+}));
+
 export default function LiveWinsTicker() {
-    // Fill initial state with enough items to span a wide screen
-    const [wins, setWins] = useState<WinEvent[]>(() =>
-        Array.from({ length: 10 }).map((_, i) => ({
-            id: i,
-            user: USERS[Math.floor(Math.random() * USERS.length)],
-            game: GAMES[Math.floor(Math.random() * GAMES.length)],
-            amount: Math.floor(Math.random() * 500) + 10,
-            color: "text-[hsl(145,70%,45%)]"
-        }))
-    );
-
-    // Simulate new wins coming in (optional for marquee, but good for liveness)
-    // For a pure CSS marquee, we often don't want to re-render the list constantly 
-    // because it resets the CSS animation.
-    // STRATEGY: For Phase 3, we keep the list static-ish or append carefully.
-    // To keep it simple and smooth: Just a static loop of 20 items is enough 'ambient' motion.
-    // If we want 'live' updates, we'd need a JS-driven ticker or a complex CSS swap.
-    // Let's stick to the 'Ambient Motion' goal: A smooth, un-janking stream.
-
     return (
         <div
             className="w-full overflow-hidden bg-[hsl(220,20%,8%)] border-b border-white/5 py-1.5 relative z-10"
@@ -55,13 +39,13 @@ export default function LiveWinsTicker() {
             <div className="flex animate-ticker w-max">
                 {/* original list */}
                 <div className="flex gap-4 px-2">
-                    {wins.map((win, i) => (
+                    {STATIC_WINS.map((win, i) => (
                         <TickerItem key={`orig-${win.id}-${i}`} win={win} />
                     ))}
                 </div>
                 {/* duplicated list for seamless loop */}
                 <div className="flex gap-4 px-2">
-                    {wins.map((win, i) => (
+                    {STATIC_WINS.map((win, i) => (
                         <TickerItem key={`dupe-${win.id}-${i}`} win={win} />
                     ))}
                 </div>

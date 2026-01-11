@@ -36,9 +36,10 @@ function MobileBottomNav() {
                         <Link
                             key={item.id}
                             to={item.path}
+                            aria-label={item.label}
                             className={cn(
                                 "flex flex-col items-center justify-center gap-1 flex-1 h-full transition-all",
-                                active ? "text-white" : "text-white/40",
+                                active ? "text-white" : "text-white/70",
                                 item.highlight && "relative"
                             )}
                         >
