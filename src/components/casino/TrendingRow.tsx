@@ -5,7 +5,6 @@
  */
 
 import { Flame, TrendingUp, Users } from 'lucide-react';
-import { motion } from 'framer-motion';
 
 const TRENDING_ITEMS = [
     { id: 1, label: 'Crash: 100x Multiplier Hit!', icon: Flame, color: 'text-amber-500' },

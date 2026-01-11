@@ -133,8 +133,7 @@ export default function LobbyContent() {
                 <div className="pt-8 border-t border-white/5">
                     <div className="flex items-center gap-3 mb-6">
                         <div className="relative">
-                            <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse relative z-10" />
-                            <div className="absolute inset-0 w-2 h-2 bg-green-500 rounded-full animate-ping opacity-75" />
+                            <div className="w-2 h-2 bg-green-500 rounded-full relative z-10" />
                         </div>
                         <h2 className="text-sm font-bold text-white uppercase tracking-widest">Live Feed</h2>
                     </div>
