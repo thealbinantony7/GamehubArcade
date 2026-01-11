@@ -67,7 +67,7 @@ function VerifyDrawer({ isOpen, onClose, data }: VerifyDrawerProps) {
                             <h2 className="text-lg font-bold text-white uppercase tracking-tight">Verification</h2>
                             <button
                                 onClick={onClose}
-                                className="w-8 h-8 flex items-center justify-center text-white/40 hover:text-white transition-colors rounded hover:bg-white/5"
+                                className="w-8 h-8 flex items-center justify-center text-slate-400 hover:text-white transition-colors rounded hover:bg-white/5"
                             >
                                 <X className="w-5 h-5" />
                             </button>
@@ -123,8 +123,8 @@ function DataRow({ label, value, onCopy }: { label: string; value: string; onCop
     return (
         <div className="bg-black/20 border border-white/5 rounded p-3">
             <div className="flex items-center justify-between mb-1">
-                <span className="text-xs text-white/40 uppercase tracking-wide">{label}</span>
-                <button onClick={onCopy} className="p-1 text-white/40 hover:text-white transition-colors" title="Copy">
+                <span className="text-xs text-slate-400 uppercase tracking-wide">{label}</span>
+                <button onClick={onCopy} className="p-1 text-slate-400 hover:text-white transition-colors" title="Copy">
                     <Copy className="w-3 h-3" />
                 </button>
             </div>
@@ -158,7 +158,7 @@ function RiskLimitsSection() {
 
             <div className="space-y-4">
                 <div>
-                    <label className="block text-xs text-white/40 uppercase tracking-wide mb-2">Session Loss Limit</label>
+                    <label className="block text-xs text-slate-400 uppercase tracking-wide mb-2">Session Loss Limit</label>
                     <input
                         type="number"
                         value={sessionLimit}
@@ -169,7 +169,7 @@ function RiskLimitsSection() {
                 </div>
 
                 <div>
-                    <label className="block text-xs text-white/40 uppercase tracking-wide mb-2">Daily Loss Limit</label>
+                    <label className="block text-xs text-slate-400 uppercase tracking-wide mb-2">Daily Loss Limit</label>
                     <input
                         type="number"
                         value={dailyLimit}
@@ -180,7 +180,7 @@ function RiskLimitsSection() {
                 </div>
 
                 <div>
-                    <label className="block text-xs text-white/40 uppercase tracking-wide mb-2">Cooldown Duration</label>
+                    <label className="block text-xs text-slate-400 uppercase tracking-wide mb-2">Cooldown Duration</label>
                     <div className="grid grid-cols-3 gap-2">
                         <button onClick={() => setCooldown(15)} className="px-3 py-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded text-xs font-mono text-white/90 uppercase transition-colors">15m</button>
                         <button onClick={() => setCooldown(30)} className="px-3 py-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded text-xs font-mono text-white/90 uppercase transition-colors">30m</button>
