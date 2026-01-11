@@ -44,7 +44,7 @@ jobs:
           fi
           echo "✅ PASS: Accessibility score $SCORE"
       
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: accessibility-reports
@@ -91,7 +91,7 @@ jobs:
           
           echo "✅ PASS: CLS $CLS, INP $INP"
       
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: performance-reports
