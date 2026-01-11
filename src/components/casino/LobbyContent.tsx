@@ -36,8 +36,7 @@ export default function LobbyContent() {
     const displayPopular = popularGames.length > 0 ? popularGames : allGames;
 
     return (
-        <div className="flex flex-col min-h-screen">
-            {/* 1. Ticker (Edge-to-Edge) */}
+        <div id="main-content" className="w-full flex flex-col relative" style={{ contain: 'layout' }}>          {/* 1. Ticker (Edge-to-Edge) */}
             <div className="border-b border-white/5 bg-black/20 backdrop-blur-md relative z-30">
                 <LiveWinsTicker />
             </div>

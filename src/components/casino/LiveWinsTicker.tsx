@@ -22,7 +22,7 @@ interface WinEvent {
 export default function LiveWinsTicker() {
     // Fill initial state with enough items to span a wide screen
     const [wins, setWins] = useState<WinEvent[]>(() =>
-        Array.from({ length: 20 }).map((_, i) => ({
+        Array.from({ length: 10 }).map((_, i) => ({
             id: i,
             user: USERS[Math.floor(Math.random() * USERS.length)],
             game: GAMES[Math.floor(Math.random() * GAMES.length)],
@@ -52,7 +52,7 @@ export default function LiveWinsTicker() {
             <div className="absolute left-0 top-0 bottom-0 w-16 bg-gradient-to-r from-[hsl(220,20%,8%)] to-transparent z-20 pointer-events-none" />
             <div className="absolute right-0 top-0 bottom-0 w-16 bg-gradient-to-l from-[hsl(220,20%,8%)] to-transparent z-20 pointer-events-none" />
 
-            <div className="flex animate-ticker w-max hover:pause">
+            <div className="flex animate-ticker w-max">
                 {/* original list */}
                 <div className="flex gap-4 px-2">
                     {wins.map((win, i) => (

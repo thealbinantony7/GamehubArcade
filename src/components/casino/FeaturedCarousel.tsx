@@ -45,12 +45,14 @@ export default function FeaturedCarousel({ games }: FeaturedCarouselProps) {
             {/* Scroll Buttons */}
             <button
                 onClick={() => scroll('left')}
+                aria-label="Previous games"
                 className="absolute left-0 top-1/2 -translate-y-1/2 z-10 h-10 w-10 bg-black/60 hover:bg-black/80 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
             >
                 <ChevronLeft className="h-5 w-5 text-white" />
             </button>
             <button
                 onClick={() => scroll('right')}
+                aria-label="Next games"
                 className="absolute right-0 top-1/2 -translate-y-1/2 z-10 h-10 w-10 bg-black/60 hover:bg-black/80 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
             >
                 <ChevronRight className="h-5 w-5 text-white" />
